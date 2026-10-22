@@ -1,0 +1,11 @@
+---
+import BookingWidget from "./BookingWidget.astro";
+
+interface Props {
+  mode?: "hero" | "final";
+}
+
+const { mode = "hero" } = Astro.props;
+---
+
+<BookingWidget mode={mode} />

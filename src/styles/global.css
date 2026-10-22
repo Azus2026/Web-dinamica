@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  --sw-bg: #0F0E0C;
+  --sw-surface: #1A1814;
+  --sw-ink: #F4EFE6;
+  --sw-ink-soft: #B8B0A2;
+  --sw-accent: #C87D4B;
+  --sw-accent-ink: #0F0E0C;
+  --sw-border: rgba(244, 239, 230, 0.12);
+  --sw-font-display: 'Cormorant Garamond', Georgia, serif;
+  --sw-font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --sw-ease: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+html {
+  background-color: var(--sw-bg);
+  color: var(--sw-ink);
+  font-family: var(--sw-font-body);
+  scroll-behavior: auto;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

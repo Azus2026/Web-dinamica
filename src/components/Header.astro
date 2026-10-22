@@ -1,0 +1,82 @@
+---
+import { hotelData } from "../data/hotel";
+---
+
+<header class="fixed top-5 z-50 left-1/2 -translate-x-1/2 lg:left-10 lg:translate-x-0 w-[calc(100%-2rem)] max-w-fit">
+  <nav
+    class="flex items-center gap-3 sm:gap-6 px-4 sm:px-6 py-2.5 rounded-full bg-[#1A1814]/85 backdrop-blur-md border border-[rgba(244,239,230,0.12)] shadow-2xl transition-all duration-300"
+    aria-label="Navegación principal"
+  >
+    <!-- Logo con Arco Arquitectónico (currentColor) -->
+    <a href="#recepcion" class="flex items-center gap-2.5 text-[#F4EFE6] hover:text-[#C87D4B] transition-colors group">
+      <svg
+        class="w-5 h-6 text-current transition-transform duration-300 group-hover:scale-105"
+        viewBox="0 0 24 28"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          d="M3 27V12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V27"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+        <path
+          d="M7 27V13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13V27"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-opacity="0.6"
+        />
+        <line x1="1" y1="27" x2="23" y2="27" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+      <span class="font-serif tracking-widest text-sm uppercase font-medium whitespace-nowrap hidden sm:inline-block">
+        {hotelData.name}
+      </span>
+    </a>
+
+    <!-- Enlaces de ancla a las 5 paradas -->
+    <div class="hidden md:flex items-center gap-5 text-xs uppercase tracking-wider text-[#B8B0A2]">
+      <a href="#recepcion" class="hover:text-[#F4EFE6] transition-colors">Recepción</a>
+      <a href="#comunidad" class="hover:text-[#F4EFE6] transition-colors">El Salón</a>
+      <a href="#restaurante" class="hover:text-[#F4EFE6] transition-colors">Restaurante</a>
+      <a href="#bar" class="hover:text-[#F4EFE6] transition-colors">Bar</a>
+      <a href="#suites" class="hover:text-[#F4EFE6] transition-colors">Suites</a>
+    </div>
+
+    <!-- Separador sutil -->
+    <span class="hidden md:block w-px h-4 bg-[rgba(244,239,230,0.12)]"></span>
+
+    <!-- Botón de acción rápida (Color teja #C87D4B con texto oscuro #0F0E0C para contraste AAA) -->
+    <a
+      id="header-booking-btn"
+      href="#suites"
+      class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#C87D4B] hover:bg-[#d58b59] text-[#0F0E0C] font-sans font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+    >
+      <span id="header-booking-label">Reservar · <span class="tabular-nums">2 noches · $520 USD</span></span>
+    </a>
+  </nav>
+</header>
+
+<script>
+  import { getBookingState, getNightsCount } from "../scripts/booking-store";
+  import { hotelData } from "../data/hotel";
+
+  function updateHeaderButton() {
+    const label = document.getElementById("header-booking-label");
+    if (!label) return;
+    const s = getBookingState();
+    const nights = getNightsCount();
+    const room = hotelData.rooms.find((r) => r.id === s.selectedRoomId) || hotelData.rooms[0];
+    const totalUsd = room.pricePerNight * nights;
+    const nightText = nights === 1 ? "1 noche" : `${nights} noches`;
+    label.innerHTML = `Reservar · <span class="tabular-nums">${nightText} · $${totalUsd} USD</span>`;
+  }
+
+  updateHeaderButton();
+
+  window.addEventListener("booking:change", () => {
+    updateHeaderButton();
+  });
+</script>

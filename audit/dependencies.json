@@ -1,0 +1,325 @@
+﻿{
+  "advisories": {
+    "1117141": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1117141,
+      "title": "Astro: XSS in define:vars via incomplete </script> tag sanitization",
+      "module_name": "astro",
+      "vulnerable_versions": "<6.1.6",
+      "patched_versions": ">=6.1.6",
+      "severity": "moderate",
+      "cwe": "CWE-79",
+      "github_advisory_id": "GHSA-j687-52p2-xcff",
+      "url": "https://github.com/advisories/GHSA-j687-52p2-xcff"
+    },
+    "1118920": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1118920,
+      "title": "Astro: Server island encrypted parameters vulnerable to cross-component replay",
+      "module_name": "astro",
+      "vulnerable_versions": "<6.1.10",
+      "patched_versions": ">=6.1.10",
+      "severity": "low",
+      "cwe": "CWE-79, CWE-323",
+      "github_advisory_id": "GHSA-xr5h-phrj-8vxv",
+      "url": "https://github.com/advisories/GHSA-xr5h-phrj-8vxv"
+    },
+    "1120680": {
+      "findings": [
+        {
+          "version": "0.27.7",
+          "paths": [
+            ".>astro>esbuild"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1120680,
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "module_name": "esbuild",
+      "vulnerable_versions": ">=0.27.3 <0.28.1",
+      "patched_versions": ">=0.28.1",
+      "severity": "low",
+      "cwe": "CWE-22",
+      "github_advisory_id": "GHSA-g7r4-m6w7-qqqr",
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr"
+    },
+    "1123700": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1123700,
+      "title": "Astro: XSS via Unescaped Attribute Names in Spread Props",
+      "module_name": "astro",
+      "vulnerable_versions": "<6.4.6",
+      "patched_versions": ">=6.4.6",
+      "severity": "moderate",
+      "cwe": "CWE-79",
+      "github_advisory_id": "GHSA-jrpj-wcv7-9fh9",
+      "url": "https://github.com/advisories/GHSA-jrpj-wcv7-9fh9"
+    },
+    "1124066": {
+      "findings": [
+        {
+          "version": "0.34.5",
+          "paths": [
+            ".>astro>sharp"
+          ],
+          "dev": false,
+          "optional": true,
+          "bundled": false
+        }
+      ],
+      "id": 1124066,
+      "title": "sharp inherited vulnerabilities in libvips: CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591",
+      "module_name": "sharp",
+      "vulnerable_versions": "<0.35.0",
+      "patched_versions": ">=0.35.0",
+      "severity": "high",
+      "cwe": "CWE-1395",
+      "github_advisory_id": "GHSA-f88m-g3jw-g9cj",
+      "url": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj"
+    },
+    "1139373": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1139373,
+      "title": "Astro: XSS via unescaped spread attribute names in renderHTMLElement (incomplete fix for CVE-2026-54298)",
+      "module_name": "astro",
+      "vulnerable_versions": "<7.0.6",
+      "patched_versions": ">=7.0.6",
+      "severity": "moderate",
+      "cwe": "CWE-79",
+      "github_advisory_id": "GHSA-f48w-9m4c-m7f5",
+      "url": "https://github.com/advisories/GHSA-f48w-9m4c-m7f5"
+    },
+    "1139375": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1139375,
+      "title": "Astro: Cross-site scripting via unescaped transition:* directive values on hydrated islands",
+      "module_name": "astro",
+      "vulnerable_versions": ">=3.10.0 <7.0.4",
+      "patched_versions": ">=7.0.4",
+      "severity": "low",
+      "cwe": "CWE-79, CWE-83, CWE-116",
+      "github_advisory_id": "GHSA-7pw4-f3q4-r2p2",
+      "url": "https://github.com/advisories/GHSA-7pw4-f3q4-r2p2"
+    },
+    "1139376": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1139376,
+      "title": "Astro: Reflected XSS via unescaped View Transition animation properties",
+      "module_name": "astro",
+      "vulnerable_versions": ">=2.9.0 <=7.0.9",
+      "patched_versions": ">=7.0.10",
+      "severity": "moderate",
+      "cwe": "CWE-79",
+      "github_advisory_id": "GHSA-4g3v-8h47-v7g6",
+      "url": "https://github.com/advisories/GHSA-4g3v-8h47-v7g6"
+    },
+    "1139377": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1139377,
+      "title": "Astro: Host header SSRF in prerendered error page fetch",
+      "module_name": "astro",
+      "vulnerable_versions": "<6.4.6",
+      "patched_versions": ">=6.4.6",
+      "severity": "high",
+      "cwe": "CWE-20, CWE-918",
+      "github_advisory_id": "GHSA-2pvr-wf23-7pc7",
+      "url": "https://github.com/advisories/GHSA-2pvr-wf23-7pc7"
+    },
+    "1139378": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1139378,
+      "title": "Astro: Reflected XSS via unescaped slot name",
+      "module_name": "astro",
+      "vulnerable_versions": "<6.3.3",
+      "patched_versions": ">=6.3.3",
+      "severity": "high",
+      "cwe": "CWE-79, CWE-80",
+      "github_advisory_id": "GHSA-8hv8-536x-4wqp",
+      "url": "https://github.com/advisories/GHSA-8hv8-536x-4wqp"
+    },
+    "1193723": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1193723,
+      "title": "Astro: Remote code execution through AVIF image optimization",
+      "module_name": "astro",
+      "vulnerable_versions": "<7.2.8",
+      "patched_versions": ">=7.2.8",
+      "severity": "critical",
+      "cwe": "CWE-125, CWE-787",
+      "github_advisory_id": "GHSA-26w7-cxv4-gfx2",
+      "url": "https://github.com/advisories/GHSA-26w7-cxv4-gfx2"
+    },
+    "1193724": {
+      "findings": [
+        {
+          "version": "5.18.2",
+          "paths": [
+            ".>astro"
+          ],
+          "dev": false,
+          "optional": false,
+          "bundled": false
+        }
+      ],
+      "id": 1193724,
+      "title": "Astro: Authorization bypass from missing path-segment boundary check when stripping the configured base",
+      "module_name": "astro",
+      "vulnerable_versions": "<=7.2.3",
+      "patched_versions": ">=7.2.4",
+      "severity": "moderate",
+      "cwe": "CWE-187",
+      "github_advisory_id": "GHSA-376h-93r7-7g6f",
+      "url": "https://github.com/advisories/GHSA-376h-93r7-7g6f"
+    },
+    "1193725": {
+      "findings": [
+        {
+          "version": "0.34.5",
+          "paths": [
+            ".>astro>sharp"
+          ],
+          "dev": false,
+          "optional": true,
+          "bundled": false
+        }
+      ],
+      "id": 1193725,
+      "title": "sharp: Vulnerabilities in libheif: GHSA-g89c-p67h-r497 and GHSA-2jg2-4ch7-h545",
+      "module_name": "sharp",
+      "vulnerable_versions": "<0.35.4",
+      "patched_versions": ">=0.35.4",
+      "severity": "high",
+      "cwe": "CWE-122",
+      "github_advisory_id": "GHSA-rgj7-g3m4-5g8c",
+      "url": "https://github.com/advisories/GHSA-rgj7-g3m4-5g8c"
+    },
+    "1241331": {
+      "findings": [
+        {
+          "version": "0.34.5",
+          "paths": [
+            ".>astro>sharp"
+          ],
+          "dev": false,
+          "optional": true,
+          "bundled": false
+        }
+      ],
+      "id": 1241331,
+      "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+      "module_name": "sharp",
+      "vulnerable_versions": "<0.35.5",
+      "patched_versions": ">=0.35.5",
+      "severity": "high",
+      "cwe": "CWE-416, CWE-1395",
+      "github_advisory_id": "GHSA-wq5f-xc86-pv6w",
+      "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w"
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 3,
+      "moderate": 5,
+      "high": 5,
+      "critical": 1
+    },
+    "dependencies": 285,
+    "devDependencies": 0,
+    "optionalDependencies": 130,
+    "totalDependencies": 415
+  }
+}

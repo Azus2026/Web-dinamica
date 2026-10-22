@@ -1,0 +1,275 @@
+---
+import { hotelData } from "../data/hotel";
+import BookingWidget from "./BookingWidget.astro";
+
+const { sections, connectors, connScroll } = hotelData.scrollWorld;
+
+const timelineLabels = [
+  "La recepción",
+  "El salón 5×6m",
+  "El restaurante",
+  "El bar",
+  "La suite 2×2m"
+];
+
+// Calcular posiciones normalizadas exactas para los anclajes de scroll (#recepcion, #comunidad, #restaurante, #bar, #suites)
+const rawSegments: { type: "stop" | "connector"; index: number; weight: number }[] = [];
+sections.forEach((s, idx) => {
+  rawSegments.push({ type: "stop", index: idx, weight: s.scrollWeight });
+  if (idx < sections.length - 1) {
+    rawSegments.push({ type: "connector", index: idx, weight: connScroll });
+  }
+});
+const totalWeight = rawSegments.reduce((acc, seg) => acc + seg.weight, 0);
+
+let accWeight = 0;
+const stopAnchorNorms: number[] = [];
+for (const seg of rawSegments) {
+  const start = accWeight / totalWeight;
+  accWeight += seg.weight;
+  const end = accWeight / totalWeight;
+  if (seg.type === "stop") {
+    if (seg.index === 0) {
+      stopAnchorNorms.push(0);
+    } else if (seg.index === sections.length - 1) {
+      stopAnchorNorms.push((start + end) / 2);
+    } else {
+      stopAnchorNorms.push((start + end) / 2);
+    }
+  }
+}
+---
+
+<div id="scroll-world-container" class="relative w-full bg-[var(--sw-bg,#0F0E0C)] text-[var(--sw-ink,#F4EFE6)]">
+  <!-- TRACK DE SCROLL -->
+  <div id="scroll-world-track" class="relative w-full" style="min-height: 850vh;">
+    
+    <!-- ANCLAJES DE POSICIÓN EN EL TRACK PARA NAVEGACIÓN NATIVA (#recepcion ... #suites) -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+      {sections.map((stop, idx) => (
+        <div
+          id={stop.id}
+          data-anchor-stop={idx}
+          class="absolute left-0 w-full h-screen pointer-events-none"
+          style={`top: calc(${stopAnchorNorms[idx].toFixed(4)} * (100% - 100vh));`}
+        />
+      ))}
+    </div>
+
+    <!-- ==========================================================
+         1. ESCENARIO DE VÍDEO Y STILLS FULL-VIEWPORT (100vw x 100vh)
+         ========================================================== -->
+    <div
+      id="scroll-stage"
+      class="sticky top-0 left-0 w-full h-screen z-0 overflow-hidden bg-[#0F0E0C]"
+    >
+      <!-- CAPA MULTIMEDIA 100% VIEWPORT (Stills debajo como fallback + Vídeos encima) -->
+      <div class="absolute inset-0 w-full h-full pointer-events-none z-0">
+        <!-- 5 STILLS (Fotogramas WebP de paradas) -->
+        {sections.map((s, idx) => (
+          <img
+            src={s.still}
+            alt={s.title}
+            data-still-index={idx}
+            class="sw-still-img absolute inset-0 w-full h-full object-cover select-none will-change-[opacity] z-0"
+            style={idx === 0 ? "opacity: 1;" : "opacity: 0;"}
+            loading="eager"
+            decoding="async"
+          />
+        ))}
+
+        <!-- 4 CONECTORES DE VÍDEO (Clips MP4 optimizados GOP 6) -->
+        {connectors.map((c, idx) => (
+          <video
+            src={c}
+            data-connector-index={idx}
+            class="sw-connector-video absolute inset-0 w-full h-full object-cover select-none will-change-[opacity] z-[1]"
+            style="opacity: 0;"
+            muted
+            playsinline
+            disablepictureinpicture
+            preload="auto"
+          ></video>
+        ))}
+      </div>
+
+      <!-- ==========================================================
+           2. DEGRADADOS DE PROTECCIÓN DE LECTURA (SCRIM CINEMATOGRÁFICO)
+           ========================================================== -->
+      <!-- Degradado lateral izquierdo -->
+      <div
+        class="bg-gradient-to-r from-[#0F0E0C]/90 via-[#0F0E0C]/45 to-transparent w-full lg:w-3/5 h-full absolute inset-y-0 left-0 pointer-events-none z-10"
+        aria-hidden="true"
+      ></div>
+
+      <!-- Degradado inferior -->
+      <div
+        class="bg-gradient-to-t from-[#0F0E0C]/90 via-[#0F0E0C]/30 to-transparent w-full h-72 absolute bottom-0 inset-x-0 pointer-events-none z-10"
+        aria-hidden="true"
+      ></div>
+
+      <!-- ==========================================================
+           3. BLOQUES DE TEXTO FLOTANTES ABAJO A LA IZQUIERDA (SIN TARJETA)
+           ========================================================== -->
+      <div class="absolute inset-0 pointer-events-none z-20">
+        {sections.map((stop, index) => (
+          <article
+            data-stop-index={index}
+            class={`sw-narrative-section absolute left-6 sm:left-10 lg:left-14 right-6 sm:right-auto bottom-12 max-w-xl z-20 will-change-[opacity,transform] ${
+              index === 0
+                ? "opacity-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 translate-y-4 pointer-events-none"
+            }`}
+            aria-hidden={index === 0 ? "false" : "true"}
+          >
+            <!-- Tag / Paso -->
+            <div class="flex items-center gap-3 mb-2.5">
+              <span class="text-xs uppercase tracking-widest text-[#C87D4B] font-semibold tabular-nums">
+                {stop.stepNumber}
+              </span>
+              <span class="w-1.5 h-1.5 rounded-full bg-[#C87D4B]"></span>
+              <span class="text-xs uppercase tracking-wider text-[#F4EFE6]/85 font-medium">
+                {stop.tag}
+              </span>
+            </div>
+
+            <!-- Título: Solo un H1 en toda la página (Parada 0) -->
+            {index === 0 ? (
+              <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-[1.12] text-[#F4EFE6] mb-3 drop-shadow-sm">
+                {stop.title}
+              </h1>
+            ) : (
+              <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal leading-[1.15] text-[#F4EFE6] mb-3 drop-shadow-sm">
+                {stop.title}
+              </h2>
+            )}
+
+            <!-- Descripción narrativa sin caja -->
+            <p class="text-sm sm:text-base text-[#F4EFE6]/85 font-light leading-relaxed mb-4 max-w-lg">
+              {stop.description}
+            </p>
+
+            <!-- Highlights limpios sin cajas opacas (Parada 1 Mapa y Parada 2 Restaurante) -->
+            {stop.highlights && (
+              <div class="flex flex-wrap items-center gap-6 sm:gap-8 mb-4 pt-3 border-t border-[#F4EFE6]/15">
+                {stop.highlights.map((h) => (
+                  <div>
+                    <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block mb-0.5">
+                      {h.label}
+                    </span>
+                    <span class="text-lg font-serif text-[#F4EFE6] font-semibold tabular-nums">
+                      {h.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <!-- Secondary CTA (Parada 2 y 3) -->
+            {stop.secondaryCta && (
+              <div class="pt-1 mb-2">
+                <a
+                  href={stop.secondaryCta.href}
+                  class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-[#C87D4B] hover:text-[#d58b59] transition-colors group"
+                >
+                  <span>{stop.secondaryCta.label}</span>
+                  <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
+                </a>
+              </div>
+            )}
+
+            <!-- Widgets de reserva translúcidos y compactos debajo del texto en Parada 0 y Parada 4 -->
+            {stop.showInlineBooking && (
+              <div class="mt-4">
+                <BookingWidget mode="hero" />
+              </div>
+            )}
+
+            {stop.showRoomSelector && (
+              <div class="mt-4">
+                <BookingWidget mode="final" />
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <!-- Indicador inferior derecho sutil -->
+      <div
+        class="absolute bottom-8 right-8 z-30 hidden md:flex items-center gap-3 pointer-events-none"
+        aria-hidden="true"
+      >
+        <span class="text-[10px] uppercase tracking-[0.28em] text-[#F4EFE6]/65 font-medium">
+          DESLIZA PARA RECORRER NOMAD ARCH
+        </span>
+        <span class="w-6 h-px bg-[#C87D4B]/70"></span>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         4. TIMELINE VERTICAL A LA DERECHA (PUNTOS + PÍLDORA ACTIVA)
+         ========================================================== -->
+    <nav
+      id="sw-vertical-timeline"
+      class="fixed right-8 top-1/2 -translate-y-1/2 z-30 hidden md:flex flex-col items-end gap-5 transition-opacity duration-300"
+      aria-label="Progreso del recorrido"
+    >
+      <!-- Línea vertical sutil de fondo que conecta los 5 puntos -->
+      <div
+        class="absolute right-[5px] top-3 bottom-3 w-px bg-[#F4EFE6]/20 pointer-events-none"
+        aria-hidden="true"
+      ></div>
+
+      {sections.map((s, idx) => (
+        <button
+          type="button"
+          data-progress-idx={idx}
+          class="sw-progress-item group relative flex items-center justify-end gap-3 cursor-pointer py-0.5 focus:outline-none"
+          aria-label={timelineLabels[idx] || s.id}
+        >
+          <!-- Etiqueta en píldora oscura a la izquierda del punto activo -->
+          <span
+            class={`sw-progress-pill bg-[#0F0E0C]/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-[#F4EFE6] border border-[#F4EFE6]/10 transition-all duration-150 whitespace-nowrap ${
+              idx === 0
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-2 pointer-events-none group-hover:opacity-80 group-hover:translate-x-0"
+            }`}
+          >
+            {timelineLabels[idx] || s.id}
+          </span>
+
+          <!-- Punto de la parada -->
+          <span
+            class={`sw-progress-dot relative z-10 w-[11px] h-[11px] rounded-full border transition-all duration-150 ${
+              idx === 0
+                ? "bg-[#C87D4B] border-[#C87D4B] scale-125 shadow-[0_0_12px_rgba(200,125,75,0.85)]"
+                : "bg-[#0F0E0C] border-[#F4EFE6]/40 group-hover:border-[#F4EFE6]"
+            }`}
+          ></span>
+        </button>
+      ))}
+    </nav>
+
+  </div>
+</div>
+
+<script>
+  import { ScrollWorldEngine } from "../scripts/scroll-world";
+
+  function initScrollWorld() {
+    const container = document.getElementById("scroll-world-container");
+    if (container) {
+      new ScrollWorldEngine(container);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScrollWorld);
+  } else {
+    initScrollWorld();
+  }
+
+  document.addEventListener("astro:page-load", initScrollWorld);
+</script>

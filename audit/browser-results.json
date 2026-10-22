@@ -1,0 +1,113 @@
+{
+  "externalTrafficMockedOrBlocked": true,
+  "browser": "Chromium",
+  "results": [
+    {
+      "name": "Homepage and client scripts load",
+      "passed": true,
+      "observed": {
+        "status": 200,
+        "pageErrors": []
+      }
+    },
+    {
+      "name": "Quote synchronizes for 1 guests",
+      "passed": true,
+      "observed": {
+        "expected": "$280 USD",
+        "actual": "$280 USD"
+      }
+    },
+    {
+      "name": "Quote synchronizes for 2 guests",
+      "passed": true,
+      "observed": {
+        "expected": "$520 USD",
+        "actual": "$520 USD"
+      }
+    },
+    {
+      "name": "Quote synchronizes for 3 guests",
+      "passed": true,
+      "observed": {
+        "expected": "$680 USD",
+        "actual": "$680 USD"
+      }
+    },
+    {
+      "name": "Quote synchronizes for 4 guests",
+      "passed": true,
+      "observed": {
+        "expected": "$780 USD",
+        "actual": "$780 USD"
+      }
+    },
+    {
+      "name": "Checkout opens",
+      "passed": true,
+      "observed": {}
+    },
+    {
+      "name": "Checkout closes with Escape",
+      "passed": true,
+      "observed": {}
+    },
+    {
+      "name": "Production flow must block simulated reservation submissions",
+      "passed": true,
+      "observed": {
+        "mockedReservationPostCount": 0,
+        "posted": [],
+        "successPanelVisibleWithMockedAPI": false
+      }
+    },
+    {
+      "name": "Published legal link exists: /legal",
+      "passed": true,
+      "observed": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Published legal link exists: /privacidad",
+      "passed": true,
+      "observed": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Published legal link exists: /cookies",
+      "passed": true,
+      "observed": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Published legal link exists: /condiciones-reserva",
+      "passed": true,
+      "observed": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Mobile has no horizontal overflow",
+      "passed": true,
+      "observed": {
+        "viewport": 390,
+        "document": 390
+      }
+    },
+    {
+      "name": "Mobile booking action is in viewport",
+      "passed": true,
+      "observed": {
+        "x": 41,
+        "y": 728,
+        "width": 149,
+        "height": 51
+      }
+    }
+  ],
+  "passed": 14,
+  "failed": 0
+}

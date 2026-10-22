@@ -1,0 +1,778 @@
+---
+import { SUPPORTED_CHAINS } from "../scripts/fx-service";
+import { HOTEL_TREASURY_EVM } from "../scripts/web3-checkout";
+---
+
+<div
+  id="checkout-modal-backdrop"
+  class="fixed inset-0 z-[100] hidden items-center justify-center p-3 sm:p-6 bg-[#0F0E0C]/85 backdrop-blur-lg overflow-y-auto"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="checkout-modal-title"
+>
+  <div class="relative w-full max-w-2xl rounded-3xl bg-[#161411] border border-[#F4EFE6]/15 shadow-2xl text-[#F4EFE6] p-5 sm:p-7 my-auto max-h-[92vh] overflow-y-auto">
+    <!-- Cabecera del Modal -->
+    <div class="flex items-start justify-between gap-4 pb-4 border-b border-[#F4EFE6]/10">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="inline-block w-2 h-2 rounded-full bg-[#C87D4B]"></span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#C87D4B] font-semibold">
+            Pasarela Web3 On-Chain NOMAD ARCH × Sumac Gestión
+          </span>
+        </div>
+        <h3 id="checkout-modal-title" class="font-serif text-2xl sm:text-3xl text-[#F4EFE6] font-normal">
+          Confirmar Reserva Directa ($ USD & Crypto On-Chain)
+        </h3>
+      </div>
+      <button
+        type="button"
+        id="checkout-modal-close"
+        class="p-2 rounded-full bg-[#0F0E0C]/70 hover:bg-[#C87D4B]/20 text-[#B8B0A2] hover:text-[#F4EFE6] border border-[#F4EFE6]/10 transition-colors cursor-pointer"
+        aria-label="Cerrar modal de pago"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- CONTENIDO FORMULARIO DE CHECKOUT -->
+    <div id="checkout-form-panel" class="space-y-4 pt-4">
+      <!-- 1. Resumen Bimonetario ($ USD Web -> S/ PEN Sumac Gestión) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#0F0E0C]/80 border border-[#C87D4B]/30">
+        <div>
+          <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">Habitación asignada en Sumac</span>
+          <p id="modal-room-summary" class="font-serif text-lg text-[#F4EFE6] font-medium">
+            Hab. 201 · Atelier King Suite (Matrimonial)
+          </p>
+          <p id="modal-dates-summary" class="text-xs text-[#B8B0A2] mt-0.5">
+            2 noches · 2 huéspedes
+          </p>
+        </div>
+        <div class="sm:text-right flex flex-col justify-center">
+          <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">Total Reserva Directa</span>
+          <div class="flex sm:justify-end items-baseline gap-2">
+            <span id="modal-total-usd" class="font-serif text-2xl text-[#F4EFE6] font-semibold tabular-nums">$520 USD</span>
+            <span id="modal-total-pen" class="text-xs text-[#C87D4B] font-semibold tabular-nums">
+              (S/ 1,950 PEN en Sumac)
+            </span>
+          </div>
+          <span id="modal-fx-rate-note" class="text-[10px] text-[#B8B0A2]/80">
+            Tasa de cambio aplicada: 1 USD = S/ 3.75 PEN
+          </span>
+        </div>
+      </div>
+
+      <!-- 2. Panel de Conexión de Wallet On-Chain en Vivo -->
+      <div class="p-3.5 rounded-2xl bg-[#0F0E0C]/90 border border-[#C87D4B]/40 space-y-2.5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2.5">
+            <span id="wallet-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
+            <div>
+              <span id="wallet-status-title" class="text-xs font-semibold text-[#F4EFE6] block">
+                Wallet Web3 no conectada
+              </span>
+              <span id="wallet-balances-text" class="text-[11px] text-[#B8B0A2] font-mono block">
+                Conecta MetaMask, Rabby o Phantom para leer tu saldo on-chain y firmar el cobro
+              </span>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="btn-connect-wallet"
+            class="px-4 py-2 rounded-full bg-[#C87D4B]/20 hover:bg-[#C87D4B] text-[#C87D4B] hover:text-[#0F0E0C] border border-[#C87D4B] text-xs font-bold uppercase tracking-wider transition-all shrink-0 cursor-pointer"
+          >
+            🔗 Conectar Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Datos del Huésped Titular -->
+      <div>
+        <h4 class="text-xs uppercase tracking-wider text-[#B8B0A2] font-semibold mb-2">
+          1. Datos del Huésped para Registro en Sumac Gestión
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          <div class="sm:col-span-2">
+            <label for="checkout-guest-name" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+              Nombre Completo *
+            </label>
+            <input
+              type="text"
+              id="checkout-guest-name"
+              value="Valeria Mendoza"
+              placeholder="Ej. Valeria Mendoza"
+              class="w-full bg-[#0F0E0C] border border-[#F4EFE6]/15 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label for="checkout-nationality" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+              Nacionalidad
+            </label>
+            <input
+              type="text"
+              id="checkout-nationality"
+              value="Estadounidense"
+              class="w-full bg-[#0F0E0C] border border-[#F4EFE6]/15 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none"
+            />
+          </div>
+          <div>
+            <label for="checkout-doc-type" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+              Tipo Doc.
+            </label>
+            <select
+              id="checkout-doc-type"
+              class="w-full bg-[#0F0E0C] border border-[#F4EFE6]/15 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none"
+            >
+              <option value="pasaporte" selected>Pasaporte</option>
+              <option value="dni">DNI</option>
+              <option value="ce">Carné Extranjería</option>
+            </select>
+          </div>
+          <div>
+            <label for="checkout-doc-number" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+              N° Documento *
+            </label>
+            <input
+              type="text"
+              id="checkout-doc-number"
+              value="US9482710"
+              class="w-full bg-[#0F0E0C] border border-[#F4EFE6]/15 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none"
+              required
+            />
+          </div>
+          <div>
+            <label for="checkout-phone" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+              WhatsApp / Teléfono
+            </label>
+            <input
+              type="text"
+              id="checkout-phone"
+              value="+1 305 555 0192"
+              class="w-full bg-[#0F0E0C] border border-[#F4EFE6]/15 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Selector de Modo de Transacción Cripto en Arbitrum One -->
+      <div>
+        <h4 class="text-xs uppercase tracking-wider text-[#B8B0A2] font-semibold mb-2">
+          2. Modalidad de Pago Cripto On-Chain (Arbitrum One)
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="web3-mode-selector">
+          <label class="web3-mode-card flex flex-col justify-between p-2.5 rounded-xl border border-[#C87D4B] bg-[#C87D4B]/15 cursor-pointer transition-all" data-mode="full_amount">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase tracking-wider font-bold text-[#F4EFE6]">💎 Importe Completo</span>
+              <input type="radio" name="web3_mode" value="full_amount" checked class="accent-[#C87D4B]" />
+            </div>
+            <p id="mode-full-usd-label" class="text-xs font-semibold text-[#F4EFE6] mt-1">$520.00 USD</p>
+            <p class="text-[10px] text-[#B8B0A2]">Cobro íntegro de la estancia en Arbitrum One</p>
+          </label>
+
+          <label class="web3-mode-card flex flex-col justify-between p-2.5 rounded-xl border border-[#F4EFE6]/15 bg-[#0F0E0C]/60 cursor-pointer transition-all" data-mode="arbitrum_micro">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase tracking-wider font-bold text-[#C87D4B]">⚡ Micro-Test QA Arbitrum</span>
+              <input type="radio" name="web3_mode" value="arbitrum_micro" class="accent-[#C87D4B]" />
+            </div>
+            <p class="text-xs font-semibold text-[#F4EFE6] mt-1">$0.02 USD (Verificación On-Chain)</p>
+            <p class="text-[10px] text-[#B8B0A2]">Solo habilitado si el servidor autoriza modo QA</p>
+          </label>
+        </div>
+      </div>
+
+      <!-- 5. Selector de Red (Exclusivo Arbitrum One), Token y Wallet Oficial del Hotel -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-2xl bg-[#0F0E0C]/60 border border-[#F4EFE6]/10">
+        <div>
+          <label for="checkout-chain-select" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+            Red Blockchain Oficial
+          </label>
+          <select
+            id="checkout-chain-select"
+            class="w-full bg-[#161411] border border-[#F4EFE6]/20 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none cursor-pointer"
+          >
+            {SUPPORTED_CHAINS.map((chain) => (
+              <option value={chain.id}>
+                {chain.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label for="checkout-token-select" class="block text-[10px] uppercase tracking-wider text-[#B8B0A2] mb-1">
+            Criptomoneda / Token Autorizado
+          </label>
+          <select
+            id="checkout-token-select"
+            class="w-full bg-[#161411] border border-[#F4EFE6]/20 focus:border-[#C87D4B] rounded-xl px-3 py-2 text-xs text-[#F4EFE6] outline-none cursor-pointer"
+          >
+            <option value="USDC" selected>USDC (USD Coin · Arbitrum)</option>
+            <option value="USDT">USDT (Tether USD · Arbitrum)</option>
+            <option value="ETH">ETH (Ether Nativo · Arbitrum)</option>
+            <option value="ARB">ARB (Arbitrum Token)</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <div class="flex items-center justify-between mb-1">
+            <label for="checkout-recipient-wallet" class="text-[10px] uppercase tracking-wider text-[#B8B0A2]">
+              Billetera Receptora Oficial del Hotel (Arbitrum One · Inmutable)
+            </label>
+            <span class="text-[10px] text-emerald-400 font-semibold">✓ Verificada por Servidor</span>
+          </div>
+          <input
+            type="text"
+            id="checkout-recipient-wallet"
+            value={HOTEL_TREASURY_EVM}
+            readonly
+            class="w-full bg-[#161411]/80 border border-[#F4EFE6]/15 rounded-xl px-3 py-1.5 text-[11px] font-mono text-[#B8B0A2] outline-none cursor-not-allowed"
+          />
+        </div>
+
+        <div class="sm:col-span-2 flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#F4EFE6]/10 text-xs">
+          <span class="text-[#B8B0A2]">Importe exacto a firmar en Wallet:</span>
+          <span id="checkout-crypto-amount-preview" class="font-mono font-semibold text-[#C87D4B]">
+            0.02 USDC ($0.02 USD) en Arbitrum One
+          </span>
+        </div>
+      </div>
+
+      <!-- Estado de progreso de firma y bloque On-Chain -->
+      <div
+        id="checkout-tx-status-box"
+        class="hidden p-3 rounded-xl bg-amber-950/50 border border-amber-500/40 text-xs text-amber-200 font-medium"
+      ></div>
+
+      <!-- Mensaje de error si ocurre alguno -->
+      <div
+        id="checkout-error-box"
+        class="hidden p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 text-xs text-rose-200"
+      ></div>
+
+      <!-- Botón Principal: Cobro On-Chain Real con Wallet -->
+      <div class="space-y-2 pt-1">
+        <button
+          type="button"
+          id="btn-pay-metamask"
+          class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#C87D4B] hover:bg-[#d58b59] text-[#0F0E0C] font-sans font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-xl cursor-pointer"
+        >
+          <span>🦊 Conectar & Firmar Cobro On-Chain en Wallet</span>
+        </button>
+
+        <div class="text-center">
+          <button
+            type="button"
+            id="btn-pay-instant"
+            class="text-[11px] text-[#B8B0A2]/75 hover:text-[#F4EFE6] underline cursor-pointer py-1"
+          >
+            ¿Navegador de prueba sin extensión Wallet? Haz clic aquí para simulación local en BD (sin blockchain)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DE ÉXITO Y RECIBO SINCRONIZADO CON SUMAC GESTIÓN -->
+    <div id="checkout-success-panel" class="hidden space-y-4 pt-5">
+      <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-center space-y-2">
+        <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">
+          ✓
+        </div>
+        <h4 id="receipt-headline" class="font-serif text-2xl text-[#F4EFE6]">
+          ¡Reserva Confirmada e Inyectada en Sumac Gestión!
+        </h4>
+        <p id="receipt-subheadline" class="text-xs text-[#B8B0A2]">
+          El inventario de habitaciones ha sido actualizado en tiempo real y el pago figura como <strong class="text-emerald-300">PAGADO ONLINE</strong>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#0F0E0C]/80 border border-[#F4EFE6]/15 text-xs">
+        <div>
+          <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">Código Sumac</span>
+          <strong id="receipt-code" class="text-sm text-[#C87D4B] font-mono">RES-WEB-0000</strong>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">Habitación Asignada</span>
+          <strong id="receipt-room" class="text-sm text-[#F4EFE6]">Hab. 201 (MATRIMONIAL)</strong>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">Monto en Sumac (S/)</span>
+          <strong id="receipt-pen" class="text-sm text-emerald-400 tabular-nums">S/ 1,950 PEN</strong>
+        </div>
+        <div class="col-span-2 sm:col-span-3 pt-2 border-t border-[#F4EFE6]/10">
+          <span id="receipt-tx-label" class="text-[10px] uppercase tracking-wider text-[#B8B0A2] block">
+            TxHash Verificado On-Chain
+          </span>
+          <a
+            id="receipt-tx-link"
+            href="https://arbiscan.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs font-mono text-[#C87D4B] hover:underline break-all"
+          >
+            0x...
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+        <a
+          id="receipt-open-sumac"
+          href="http://127.0.0.1:3000/app"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#C87D4B] text-[#0F0E0C] font-semibold text-xs uppercase tracking-wider"
+        >
+          <span>Ver Reserva en Sumac Gestión (Puerto 3000)</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+        <button
+          type="button"
+          id="receipt-close-btn"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-full border border-[#F4EFE6]/20 text-xs uppercase tracking-wider text-[#F4EFE6] hover:bg-[#F4EFE6]/10 cursor-pointer"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    getBookingState,
+    getNightsCount,
+    syncInventoryWithSumac
+  } from "../scripts/booking-store";
+  import { hotelData } from "../data/hotel";
+  import {
+    convertUsdToPen,
+    type CryptoTokenSymbol
+  } from "../scripts/fx-service";
+  import {
+    createSumacQuoteHold,
+    createSumacWebReservation,
+    getSumacApiBaseUrl,
+    releaseSumacQuoteHold
+  } from "../scripts/sumac-bridge";
+  import {
+    HOTEL_TREASURY_EVM,
+    computeCheckoutAmounts,
+    connectWeb3Wallet,
+    executeWeb3WalletPayment,
+    getChainById,
+    getConnectedWalletState,
+    initEip6963Discovery,
+    refreshWalletBalances,
+    simulateVerifiedWeb3Payment,
+    switchEvmChainIfNeeded,
+    type ConnectedWalletState,
+    type Web3PaymentMode
+  } from "../scripts/web3-checkout";
+
+  const TYPE_LABELS: Record<string, string> = {
+    simple: "Simple",
+    matrimonial: "Matrimonial",
+    doble: "Doble",
+    triple: "Triple",
+    suite_familiar: "Suite Familiar"
+  };
+
+  function initCheckoutModal() {
+    initEip6963Discovery();
+
+    const backdrop = document.getElementById("checkout-modal-backdrop");
+    const closeBtn = document.getElementById("checkout-modal-close");
+    const receiptCloseBtn = document.getElementById("receipt-close-btn");
+    const formPanel = document.getElementById("checkout-form-panel");
+    const successPanel = document.getElementById("checkout-success-panel");
+    const errorBox = document.getElementById("checkout-error-box");
+    const txStatusBox = document.getElementById("checkout-tx-status-box");
+
+    const walletDot = document.getElementById("wallet-status-dot");
+    const walletTitle = document.getElementById("wallet-status-title");
+    const walletBalancesText = document.getElementById("wallet-balances-text");
+    const btnConnectWallet = document.getElementById("btn-connect-wallet") as HTMLButtonElement | null;
+    const recipientInput = document.getElementById("checkout-recipient-wallet") as HTMLInputElement | null;
+
+    const roomSummaryEl = document.getElementById("modal-room-summary");
+    const datesSummaryEl = document.getElementById("modal-dates-summary");
+    const totalUsdEl = document.getElementById("modal-total-usd");
+    const totalPenEl = document.getElementById("modal-total-pen");
+    const fxRateNoteEl = document.getElementById("modal-fx-rate-note");
+    const modeFullUsdLabel = document.getElementById("mode-full-usd-label");
+
+    const chainSelect = document.getElementById("checkout-chain-select") as HTMLSelectElement | null;
+    const tokenSelect = document.getElementById("checkout-token-select") as HTMLSelectElement | null;
+    const cryptoPreviewEl = document.getElementById("checkout-crypto-amount-preview");
+    const modeCards = document.querySelectorAll(".web3-mode-card");
+
+    const btnMetaMask = document.getElementById("btn-pay-metamask") as HTMLButtonElement | null;
+    const btnInstant = document.getElementById("btn-pay-instant") as HTMLButtonElement | null;
+
+    let currentMode: Web3PaymentMode = "full_amount";
+
+    function getSelectedMode(): Web3PaymentMode {
+      const checked = document.querySelector('input[name="web3_mode"]:checked') as HTMLInputElement | null;
+      return (checked?.value as Web3PaymentMode) || currentMode;
+    }
+
+    function renderWalletStatus(w: ConnectedWalletState) {
+      if (!w.connected || !w.address) {
+        if (walletDot) walletDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0";
+        if (walletTitle) walletTitle.textContent = "Wallet Web3 no conectada";
+        if (walletBalancesText) {
+          walletBalancesText.textContent =
+            "Haz clic en 'Conectar Wallet' para vincular MetaMask / Rabby y leer tu saldo on-chain";
+        }
+        if (btnConnectWallet) btnConnectWallet.textContent = "🔗 Conectar Wallet";
+        return;
+      }
+
+      const shortAddr = `${w.address.slice(0, 6)}...${w.address.slice(-4)}`;
+      const netName = w.chainConfig?.shortName || `Chain ${w.chainIdHex}`;
+      if (walletDot) walletDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0";
+      if (walletTitle) {
+        walletTitle.textContent = `✓ ${w.walletName} conectada: ${shortAddr} (${netName})`;
+      }
+      if (walletBalancesText) {
+        walletBalancesText.textContent = `Saldos en red: ${w.balances.nativeBalance} ${w.balances.nativeSymbol} · ${w.balances.USDC} USDC · ${w.balances.USDT} USDT · ${w.balances.ARB} ARB`;
+      }
+      if (btnConnectWallet) {
+        btnConnectWallet.textContent = `✓ ${shortAddr}`;
+      }
+
+      // Auto-seleccionar el token en el que el usuario realmente tenga saldo en la red activa
+      if (tokenSelect) {
+        const currentTok = tokenSelect.value as CryptoTokenSymbol;
+        if (currentTok === "USDC" && w.balances.USDC < 0.02 && w.balances.nativeBalance > 0) {
+          tokenSelect.value = "ETH";
+          refreshModalSummary();
+        } else if (currentTok === "ETH" && w.balances.nativeBalance === 0 && w.balances.USDC >= 0.02) {
+          tokenSelect.value = "USDC";
+          refreshModalSummary();
+        }
+      }
+    }
+
+    window.addEventListener("wallet:Updated", (e: any) => {
+      renderWalletStatus(e.detail || getConnectedWalletState());
+    });
+
+    btnConnectWallet?.addEventListener("click", async () => {
+      if (errorBox) errorBox.classList.add("hidden");
+      try {
+        btnConnectWallet.disabled = true;
+        btnConnectWallet.textContent = "Conectando...";
+        const targetChain = chainSelect?.value || "arbitrum";
+        const w = await connectWeb3Wallet(targetChain);
+        renderWalletStatus(w);
+      } catch (err: any) {
+        if (errorBox) {
+          errorBox.textContent = err?.message || "No se pudo conectar con la wallet.";
+          errorBox.classList.remove("hidden");
+        }
+        if (btnConnectWallet) btnConnectWallet.textContent = "🔗 Conectar Wallet";
+      } finally {
+        if (btnConnectWallet) btnConnectWallet.disabled = false;
+      }
+    });
+
+    if (recipientInput) {
+      recipientInput.value = HOTEL_TREASURY_EVM;
+    }
+
+    function refreshModalSummary() {
+      const s = getBookingState();
+      const nights = getNightsCount();
+      const room = hotelData.rooms.find((r) => r.id === s.selectedRoomId) || hotelData.rooms[0];
+      const totalUsd = room.pricePerNight * nights;
+      const totalPen = convertUsdToPen(totalUsd, s.usdToPen);
+      const typeLabel = TYPE_LABELS[room.sumacRoomType] || room.sumacRoomType;
+      const roomNum =
+        s.assignedRoomNumber ||
+        s.inventory?.byRoomType?.[room.sumacRoomType]?.nextRoomNumber ||
+        "Por confirmar";
+
+      if (roomSummaryEl) {
+        roomSummaryEl.textContent = `Hab. ${roomNum} · ${room.name} (${typeLabel})`;
+      }
+      if (datesSummaryEl) {
+        datesSummaryEl.textContent = `${s.checkIn} → ${s.checkOut} (${nights} ${nights === 1 ? "noche" : "noches"}) · ${s.guests} ${s.guests === 1 ? "huésped" : "huéspedes"} (Cap. ${room.capacity} pers.)`;
+      }
+      if (totalUsdEl) {
+        totalUsdEl.textContent = `$${totalUsd} USD`;
+      }
+      if (totalPenEl) {
+        totalPenEl.textContent = `(S/ ${totalPen.toLocaleString("es-PE")} PEN en Sumac)`;
+      }
+      if (fxRateNoteEl) {
+        fxRateNoteEl.textContent = `Tasa de cambio oráculo servidor: 1 USD = S/ ${s.usdToPen.toFixed(2)} PEN`;
+      }
+      if (modeFullUsdLabel) {
+        modeFullUsdLabel.textContent = `$${totalUsd.toFixed(2)} USD`;
+      }
+
+      currentMode = getSelectedMode();
+      const selectedChainId = chainSelect?.value || "arbitrum";
+      const selectedToken = (tokenSelect?.value || "USDC") as CryptoTokenSymbol;
+      const chainCfg = getChainById(selectedChainId);
+      const calc = computeCheckoutAmounts(totalUsd, currentMode, selectedToken);
+
+      if (cryptoPreviewEl) {
+        cryptoPreviewEl.textContent = `${calc.tokenAmount} ${selectedToken} ($${calc.effectiveUsd.toFixed(2)} USD) en ${chainCfg.name}`;
+      }
+
+      modeCards.forEach((card) => {
+        const cardMode = card.getAttribute("data-mode");
+        if (cardMode === currentMode) {
+          card.classList.add("border-[#C87D4B]", "bg-[#C87D4B]/15");
+          card.classList.remove("border-[#F4EFE6]/15", "bg-[#0F0E0C]/60");
+        } else {
+          card.classList.remove("border-[#C87D4B]", "bg-[#C87D4B]/15");
+          card.classList.add("border-[#F4EFE6]/15", "bg-[#0F0E0C]/60");
+        }
+      });
+    }
+
+    function openModal() {
+      if (!backdrop) return;
+      errorBox?.classList.add("hidden");
+      txStatusBox?.classList.add("hidden");
+      formPanel?.classList.remove("hidden");
+      successPanel?.classList.add("hidden");
+      refreshModalSummary();
+      renderWalletStatus(getConnectedWalletState());
+      backdrop.classList.remove("hidden");
+      backdrop.classList.add("flex");
+    }
+
+    function closeModal() {
+      if (!backdrop) return;
+      backdrop.classList.add("hidden");
+      backdrop.classList.remove("flex");
+    }
+
+    window.addEventListener("checkout:open", openModal);
+    window.addEventListener("booking:change", refreshModalSummary);
+    closeBtn?.addEventListener("click", closeModal);
+    receiptCloseBtn?.addEventListener("click", closeModal);
+    window.addEventListener("keydown", (e: KeyboardEvent) => {
+      if (e.key === "Escape" && backdrop && !backdrop.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+
+    modeCards.forEach((card) => {
+      card.addEventListener("click", async () => {
+        const radio = card.querySelector('input[type="radio"]') as HTMLInputElement | null;
+        if (radio) radio.checked = true;
+        if (chainSelect) {
+          chainSelect.value = "arbitrum";
+        }
+        refreshModalSummary();
+
+        const w = getConnectedWalletState();
+        if (w.connected && w.provider && chainSelect) {
+          try {
+            await switchEvmChainIfNeeded(w.provider, chainSelect.value);
+            await refreshWalletBalances(chainSelect.value);
+          } catch {
+            // Ignorar si usuario cancela cambio previo
+          }
+        }
+      });
+    });
+
+    chainSelect?.addEventListener("change", async () => {
+      refreshModalSummary();
+      const w = getConnectedWalletState();
+      if (w.connected && w.provider && chainSelect) {
+        try {
+          await switchEvmChainIfNeeded(w.provider, chainSelect.value);
+          await refreshWalletBalances(chainSelect.value);
+        } catch {
+          // Ignorar
+        }
+      }
+    });
+    tokenSelect?.addEventListener("change", refreshModalSummary);
+
+    async function handlePaymentExecution(useRealWallet: boolean) {
+      if (errorBox) errorBox.classList.add("hidden");
+      if (txStatusBox) txStatusBox.classList.add("hidden");
+
+      const guestName =
+        (document.getElementById("checkout-guest-name") as HTMLInputElement)?.value.trim() || "";
+      const nationality =
+        (document.getElementById("checkout-nationality") as HTMLInputElement)?.value.trim() ||
+        "Internacional";
+      const docType =
+        ((document.getElementById("checkout-doc-type") as HTMLSelectElement)?.value as
+          | "dni"
+          | "pasaporte"
+          | "ce") || "pasaporte";
+      const docNumber =
+        (document.getElementById("checkout-doc-number") as HTMLInputElement)?.value.trim() || "";
+      const phone =
+        (document.getElementById("checkout-phone") as HTMLInputElement)?.value.trim() || "";
+
+      if (guestName.length < 2 || docNumber.length < 4) {
+        if (errorBox) {
+          errorBox.textContent =
+            "Datos incompletos: debes ingresar el nombre completo y un documento de identidad válido del huésped titular antes de procesar el pago.";
+          errorBox.classList.remove("hidden");
+        }
+        return;
+      }
+
+      const s = getBookingState();
+      const nights = getNightsCount();
+      const room = hotelData.rooms.find((r) => r.id === s.selectedRoomId) || hotelData.rooms[0];
+      const totalUsd = room.pricePerNight * nights;
+      const totalPen = convertUsdToPen(totalUsd, s.usdToPen);
+
+      const selectedMode = getSelectedMode();
+      const selectedChainId = chainSelect?.value || "arbitrum";
+      const selectedToken = (tokenSelect?.value || "USDC") as CryptoTokenSymbol;
+
+      if (!useRealWallet) {
+        const sim = simulateVerifiedWeb3Payment({
+          fullReservationUsd: totalUsd,
+          chainId: selectedChainId,
+          token: selectedToken,
+          mode: selectedMode
+        });
+        if (errorBox) {
+          errorBox.textContent = `Simulación local de interfaz (${sim.tokenAmount} ${sim.token}). Por seguridad comercial, las simulaciones no se envían al servidor de Sumac Gestión ni bloquean inventario real. Conecta tu wallet en Arbitrum One para confirmar una reserva real.`;
+          errorBox.classList.remove("hidden");
+        }
+        return;
+      }
+
+      if (btnMetaMask) btnMetaMask.disabled = true;
+      if (btnInstant) btnInstant.disabled = true;
+
+      let activeQuoteId = "";
+      try {
+        if (txStatusBox) {
+          txStatusBox.textContent = "⏳ Paso 1/3: Bloqueando habitación por 15 min y cotizando en servidor Sumac Gestión...";
+          txStatusBox.classList.remove("hidden");
+        }
+
+        const hold = await createSumacQuoteHold({
+          guestName,
+          docType,
+          docNumber,
+          nationality,
+          checkInDate: s.checkIn,
+          checkOutDate: s.checkOut,
+          guestCount: s.guests,
+          roomTypeRequested: room.sumacRoomType,
+          assignedRoomNumber: s.assignedRoomNumber || undefined
+        });
+        activeQuoteId = hold.quoteId;
+
+        let paymentResult;
+        try {
+          paymentResult = await executeWeb3WalletPayment({
+            fullReservationUsd: hold.totalAmountUsd,
+            chainId: selectedChainId,
+            token: selectedToken,
+            mode: selectedMode,
+            recipientAddress: hold.treasuryWallet || HOTEL_TREASURY_EVM,
+            onStatusUpdate: (msg) => {
+              if (txStatusBox) {
+                txStatusBox.textContent = msg;
+                txStatusBox.classList.remove("hidden");
+              }
+            }
+          });
+        } catch (walletErr) {
+          await releaseSumacQuoteHold(activeQuoteId);
+          throw walletErr;
+        }
+
+        if (txStatusBox) {
+          txStatusBox.textContent = "✓ Paso 3/3: Transacción confirmada en Arbitrum One. Verificando recibo en el servidor de Sumac Gestión...";
+          txStatusBox.classList.remove("hidden");
+        }
+
+        const sumacResponse = await createSumacWebReservation({
+          quoteId: hold.quoteId,
+          guestName,
+          docType,
+          docNumber,
+          nationality,
+          phone,
+          email: "reservas@nomadarch.com",
+          checkInDate: s.checkIn,
+          checkOutDate: s.checkOut,
+          guestCount: s.guests,
+          roomTypeRequested: room.sumacRoomType,
+          assignedRoomNumber: hold.assignedRoomNumber,
+          totalAmountUsd: hold.totalAmountUsd,
+          totalAmountPen: hold.totalAmountPen,
+          fxRate: s.usdToPen,
+          cryptoChain: paymentResult.chainName,
+          cryptoToken: paymentResult.token,
+          txHash: paymentResult.txHash,
+          explorerUrl: paymentResult.explorerUrl,
+          paymentMode: selectedMode,
+          paymentModeLabel: paymentResult.modeLabel,
+          isRealWalletTx: paymentResult.isRealWalletTx
+        });
+
+        await syncInventoryWithSumac(false);
+
+        const receiptCode = document.getElementById("receipt-code");
+        const receiptRoom = document.getElementById("receipt-room");
+        const receiptPen = document.getElementById("receipt-pen");
+        const receiptTxLabel = document.getElementById("receipt-tx-label");
+        const receiptTxLink = document.getElementById("receipt-tx-link") as HTMLAnchorElement | null;
+        const receiptOpenSumac = document.getElementById("receipt-open-sumac") as HTMLAnchorElement | null;
+
+        if (receiptCode) receiptCode.textContent = sumacResponse.reservation.code;
+        if (receiptRoom) {
+          receiptRoom.textContent = `Hab. ${sumacResponse.reservation.assignedRoomNumber} (${sumacResponse.reservation.roomTypeRequested.toUpperCase()})`;
+        }
+        if (receiptPen) {
+          receiptPen.textContent = `S/ ${sumacResponse.reservation.totalAmount.toLocaleString("es-PE")} PEN ($${totalUsd} USD)`;
+        }
+        if (receiptTxLabel) {
+          receiptTxLabel.textContent = `TxHash Real Confirmado en Arbitrum One${paymentResult.blockNumber ? ` · Bloque #${paymentResult.blockNumber}` : ""}`;
+        }
+        if (receiptTxLink) {
+          receiptTxLink.href = paymentResult.explorerUrl;
+          receiptTxLink.textContent = paymentResult.txHash;
+        }
+        if (receiptOpenSumac) {
+          receiptOpenSumac.href = `${getSumacApiBaseUrl()}/app`;
+        }
+
+        formPanel?.classList.add("hidden");
+        successPanel?.classList.remove("hidden");
+      } catch (err: any) {
+        if (errorBox) {
+          errorBox.textContent = err?.message || "Error al procesar el pago en la wallet.";
+          errorBox.classList.remove("hidden");
+        }
+      } finally {
+        if (txStatusBox) txStatusBox.classList.add("hidden");
+        if (btnMetaMask) btnMetaMask.disabled = false;
+        if (btnInstant) btnInstant.disabled = false;
+      }
+    }
+
+    btnMetaMask?.addEventListener("click", () => handlePaymentExecution(true));
+    btnInstant?.addEventListener("click", () => handlePaymentExecution(false));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCheckoutModal);
+  } else {
+    initCheckoutModal();
+  }
+  document.addEventListener("astro:page-load", initCheckoutModal);
+</script>

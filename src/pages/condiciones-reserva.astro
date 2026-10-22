@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+import { hotelData } from "../data/hotel";
+import { HOTEL_TREASURY_EVM } from "../scripts/web3-checkout";
+---
+
+<!doctype html>
+<html lang="es" class="bg-[#0F0E0C] text-[#F4EFE6]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Condiciones de Reserva — {hotelData.name}</title>
+  </head>
+  <body class="min-h-screen bg-[#0F0E0C] text-[#F4EFE6] p-6 sm:p-16 font-sans antialiased">
+    <main class="max-w-3xl mx-auto space-y-6">
+      <a href="/" class="text-xs uppercase tracking-widest text-[#C87D4B] hover:underline">← Volver a {hotelData.name}</a>
+      <h1 class="font-serif text-3xl sm:text-4xl text-[#F4EFE6]">Condiciones de Reserva y Pagos Cripto</h1>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-[#B8B0A2]">
+        <li>Las tarifas en el portal web se expresan en <strong>$ USD</strong> y se registran contablemente en <strong>S/ PEN (Soles)</strong> dentro de Sumac Gestión según el tipo de cambio vigente del oráculo del servidor al momento de la confirmación.</li>
+        <li>Los pagos cripto se procesan exclusivamente en la red <strong>Arbitrum One</strong> utilizando los activos autorizados: <strong>USDT, USDC, ETH y ARB</strong>.</li>
+        <li>Toda transacción debe tener como destinatario único la billetera oficial del hotel (<span class="font-mono text-[#C87D4B]">{HOTEL_TREASURY_EVM}</span>) y es verificada criptográficamente en el servidor antes de confirmar la habitación.</li>
+      </ul>
+    </main>
+  </body>
+</html>

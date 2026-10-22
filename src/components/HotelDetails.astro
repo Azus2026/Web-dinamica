@@ -1,0 +1,355 @@
+---
+import { hotelData } from "../data/hotel";
+---
+
+<div class="relative w-full bg-[#0F0E0C] text-[#F4EFE6] border-t border-[rgba(244,239,230,0.08)]">
+
+  <!-- ==============================================
+       1. SECCIÓN: EL MURAL 5x6m & ARQUITECTURA
+       ============================================== -->
+  <section id="arquitectura" class="py-24 sm:py-32 relative overflow-hidden">
+    <!-- Luz ambiental sutil -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-[#C87D4B]/5 blur-[120px] pointer-events-none rounded-full"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        
+        <!-- Texto explicativo -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#C87D4B]"></span>
+            <span class="text-xs uppercase tracking-widest text-[#C87D4B] font-semibold">
+              Materia, Silencio y Forma
+            </span>
+          </div>
+
+          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-tight text-[#F4EFE6]">
+            Un mural de 5×6 metros como corazón del refugio
+          </h2>
+
+          <p class="text-sm sm:text-base text-[#B8B0A2] font-light leading-relaxed">
+            Presidiendo el gran salón de techos abovedados de 6,5 metros de altura, el mural cartográfico de 30 m² tallado a mano en nogal español y latón envejecido rinde homenaje a las rutas históricas de los viajeros contemporáneos. Cada destello ámbar señala el origen de quienes habitan temporalmente esta casa.
+          </p>
+
+          <p class="text-sm sm:text-base text-[#B8B0A2] font-light leading-relaxed">
+            La arquitectura de NOMAD ARCH renuncia al artificio: bloques monolíticos de piedra caliza, travertino apomazado en baños, lino crudo lavado a la piedra y carpinterías continuas que tamizan la luz mediterránea para inducir un estado de reposo absoluto.
+          </p>
+
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[rgba(244,239,230,0.08)]">
+            <div>
+              <span class="block text-2xl font-serif text-[#F4EFE6] tabular-nums font-semibold">30 m²</span>
+              <span class="text-xs text-[#B8B0A2]">Superficie del mural</span>
+            </div>
+            <div>
+              <span class="block text-2xl font-serif text-[#F4EFE6] tabular-nums font-semibold">6,5 m</span>
+              <span class="text-xs text-[#B8B0A2]">Altura de bóveda</span>
+            </div>
+            <div>
+              <span class="block text-2xl font-serif text-[#F4EFE6] tabular-nums font-semibold">100%</span>
+              <span class="text-xs text-[#B8B0A2]">Piedra natural y nogal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escaparate visual del mural (Arco arquitectónico) -->
+        <div class="lg:col-span-6">
+          <div class="relative max-w-md mx-auto aspect-[4/5] rounded-t-full rounded-b-2xl border border-[rgba(244,239,230,0.15)] overflow-hidden shadow-2xl bg-[#1A1814] group">
+            <img
+              src="/world/stop-1-mapa.webp"
+              alt="Mural cartográfico de 5x6 metros en NOMAD ARCH"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0F0E0C] via-transparent to-transparent opacity-60"></div>
+            <div class="absolute bottom-6 inset-x-6 text-center">
+              <span class="inline-block px-4 py-1.5 rounded-full bg-[#1A1814]/80 backdrop-blur-md border border-[rgba(244,239,230,0.12)] text-xs text-[#F4EFE6] tracking-wider uppercase font-medium">
+                Sala Cartografía Viva · 5 × 6 m
+              </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==============================================
+       2. SECCIÓN: EXPERIENCIAS & REGALA (#regalar, #experiencias)
+       ============================================== -->
+  <section id="regalar" class="py-24 sm:py-32 bg-[#1A1814]/40 border-y border-[rgba(244,239,230,0.06)] relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-2xl mx-auto text-center mb-16 space-y-3">
+        <span class="text-xs uppercase tracking-widest text-[#C87D4B] font-semibold block">
+          Bonos y Regalos Exclusivos
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-[#F4EFE6] font-normal leading-tight">
+          Regala la experiencia NOMAD ARCH
+        </h2>
+        <p class="text-sm text-[#B8B0A2] font-light">
+          Invitaciones con fecha abierta válidas durante 12 meses, presentadas en estuche de tela de lino y lacre artesanal.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <!-- Tarjeta 1: Noche en Atelier King + Cena degustación -->
+        <div class="relative p-8 rounded-t-[100px] rounded-b-3xl bg-[#1A1814] border border-[rgba(244,239,230,0.12)] hover:border-[#C87D4B]/60 transition-all duration-300 shadow-xl flex flex-col justify-between group">
+          <div>
+            <div class="text-center pt-6 pb-8 border-b border-[rgba(244,239,230,0.08)] mb-6">
+              <span class="text-[11px] uppercase tracking-widest text-[#C87D4B] font-semibold block mb-2">Bono Experiencia 01</span>
+              <h3 class="font-serif text-2xl text-[#F4EFE6] font-medium mb-3">
+                Noche en Atelier King + Cena Degustación para 2
+              </h3>
+              <div class="flex items-baseline justify-center gap-1.5">
+                <span class="text-3xl font-serif text-[#F4EFE6] font-semibold tabular-nums">$340 USD</span>
+                <span class="text-xs text-[#B8B0A2]">/ experiencia completa</span>
+              </div>
+            </div>
+
+            <ul class="text-xs text-[#B8B0A2] space-y-3 mb-8">
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Estancia de 1 noche en <strong>Atelier King Suite (42 m²)</strong> con cama Emperor de 2×2 m.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Menú degustación de 5 pases con maridaje de bodegas catalanas en nuestro Restaurante Fuego y Origen.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Desayuno artesanal a la carta y late check-out garantizado hasta las 14:00.</span>
+              </li>
+            </ul>
+          </div>
+
+          <a
+            href="#suites"
+            class="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#0F0E0C] hover:bg-[#C87D4B] text-[#F4EFE6] hover:text-[#0F0E0C] border border-[rgba(244,239,230,0.16)] hover:border-[#C87D4B] font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-md group-hover:shadow-lg"
+          >
+            <span>Adquirir Bono Regalo</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+        </div>
+
+        <!-- Tarjeta 2: Escapada Grand Suite + Coctelería Privada -->
+        <div class="relative p-8 rounded-t-[100px] rounded-b-3xl bg-[#1A1814] border border-[#C87D4B]/40 hover:border-[#C87D4B] transition-all duration-300 shadow-2xl flex flex-col justify-between group ring-1 ring-[#C87D4B]/20">
+          <div class="absolute top-4 right-8">
+            <span class="px-3 py-1 rounded-full bg-[#C87D4B]/15 border border-[#C87D4B]/30 text-[#C87D4B] text-[10px] font-semibold tracking-wider uppercase">
+              Selección Signature
+            </span>
+          </div>
+
+          <div>
+            <div class="text-center pt-6 pb-8 border-b border-[rgba(244,239,230,0.08)] mb-6">
+              <span class="text-[11px] uppercase tracking-widest text-[#C87D4B] font-semibold block mb-2">Bono Experiencia 02</span>
+              <h3 class="font-serif text-2xl text-[#F4EFE6] font-medium mb-3">
+                Escapada Grand Suite + Coctelería Privada
+              </h3>
+              <div class="flex items-baseline justify-center gap-1.5">
+                <span class="text-3xl font-serif text-[#F4EFE6] font-semibold tabular-nums">$490 USD</span>
+                <span class="text-xs text-[#B8B0A2]">/ experiencia completa</span>
+              </div>
+            </div>
+
+            <ul class="text-xs text-[#B8B0A2] space-y-3 mb-8">
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Noche en <strong>Grand Arch Suite + Terraza (64 m²)</strong> con bañera exenta en bloque monolítico.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Cata privada de cócteles de autor y destilados botánicos raros en la barra speakeasy.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-[#C87D4B] mt-0.5">•</span>
+                <span>Botella de bienvenida de espumoso de terruño, desayuno gastronómico y parking incluido.</span>
+              </li>
+            </ul>
+          </div>
+
+          <a
+            href="https://booking.nomadarch-hotel.com/reserve?experience=bono-grand-suite-bar"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#C87D4B] hover:bg-[#d58b59] text-[#0F0E0C] font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-lg hover:scale-[1.02]"
+          >
+            <span>Adquirir Experiencia Signature</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==============================================
+       3. SECCIÓN: PREGUNTAS FRECUENTES (FAQ)
+       ============================================== -->
+  <section id="faq" class="py-24 sm:py-32 relative">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-16 space-y-3">
+        <span class="text-xs uppercase tracking-widest text-[#C87D4B] font-semibold block">
+          Claridad y Confianza
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-[#F4EFE6] font-normal leading-tight">
+          Preguntas Frecuentes
+        </h2>
+        <p class="text-sm text-[#B8B0A2] font-light">
+          Todo lo necesario para planificar tu estancia con serenidad y certeza.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        
+        <!-- FAQ 1: Check-in flexible y consigna -->
+        <details class="group bg-[#1A1814]/70 border border-[rgba(244,239,230,0.10)] rounded-2xl p-5 sm:p-6 transition-all duration-300 [&_summary::-webkit-details-marker]:hidden open:border-[#C87D4B]/40">
+          <summary class="flex items-center justify-between cursor-pointer text-left list-none font-serif text-lg sm:text-xl text-[#F4EFE6] font-medium">
+            <span>¿Cuál es el horario de check-in y qué ocurre si llego antes?</span>
+            <span class="ml-4 flex-shrink-0 w-6 h-6 rounded-full border border-[rgba(244,239,230,0.2)] flex items-center justify-center text-sm transition-transform duration-300 group-open:rotate-45 group-open:text-[#C87D4B] group-open:border-[#C87D4B]">
+              +
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[rgba(244,239,230,0.08)] text-sm text-[#B8B0A2] font-light leading-relaxed">
+            El horario oficial de entrada es a las 15:00 y la salida a las 12:00. Si llegas antes de tiempo, nuestro equipo custodiará tu equipaje en nuestra consigna climatizada sin coste adicional mientras disfrutas de un café en el salón del mapa o almuerzas en el restaurante. Si la suite está lista con antelación, te facilitaremos el acceso de inmediato.
+          </div>
+        </details>
+
+        <!-- FAQ 2: Parking privado y cargadores -->
+        <details class="group bg-[#1A1814]/70 border border-[rgba(244,239,230,0.10)] rounded-2xl p-5 sm:p-6 transition-all duration-300 [&_summary::-webkit-details-marker]:hidden open:border-[#C87D4B]/40">
+          <summary class="flex items-center justify-between cursor-pointer text-left list-none font-serif text-lg sm:text-xl text-[#F4EFE6] font-medium">
+            <span>¿Disponen de aparcamiento privado para vehículos eléctricos?</span>
+            <span class="ml-4 flex-shrink-0 w-6 h-6 rounded-full border border-[rgba(244,239,230,0.2)] flex items-center justify-center text-sm transition-transform duration-300 group-open:rotate-45 group-open:text-[#C87D4B] group-open:border-[#C87D4B]">
+              +
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[rgba(244,239,230,0.08)] text-sm text-[#B8B0A2] font-light leading-relaxed">
+            Sí. Contamos con parking subterráneo vigilado las 24 horas con acceso directo por ascensor al hotel. Disponemos de estaciones de recarga rápida (Porsche Destination Charging y Tipo 2 de hasta 22 kW). Recomendamos reservar la plaza durante el proceso de reserva online.
+          </div>
+        </details>
+
+        <!-- FAQ 3: Sin gluten y alérgenos en el restaurante -->
+        <details class="group bg-[#1A1814]/70 border border-[rgba(244,239,230,0.10)] rounded-2xl p-5 sm:p-6 transition-all duration-300 [&_summary::-webkit-details-marker]:hidden open:border-[#C87D4B]/40">
+          <summary class="flex items-center justify-between cursor-pointer text-left list-none font-serif text-lg sm:text-xl text-[#F4EFE6] font-medium">
+            <span>¿Se adaptan los menús del restaurante a celíacos o intolerancias?</span>
+            <span class="ml-4 flex-shrink-0 w-6 h-6 rounded-full border border-[rgba(244,239,230,0.2)] flex items-center justify-center text-sm transition-transform duration-300 group-open:rotate-45 group-open:text-[#C87D4B] group-open:border-[#C87D4B]">
+              +
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[rgba(244,239,230,0.08)] text-sm text-[#B8B0A2] font-light leading-relaxed">
+            Absolutamente. Nuestra propuesta culinaria de brasa y mercado se adapta de forma estricta a dietas sin gluten, vegetarianas o cualquier alérgeno alimentario. Elaboramos panadería artesanal sin gluten a diario y mantenemos partidas independientes en cocina para evitar trazas.
+          </div>
+        </details>
+
+        <!-- FAQ 4: Especificaciones Cama Emperor 2x2m -->
+        <details class="group bg-[#1A1814]/70 border border-[rgba(244,239,230,0.10)] rounded-2xl p-5 sm:p-6 transition-all duration-300 [&_summary::-webkit-details-marker]:hidden open:border-[#C87D4B]/40">
+          <summary class="flex items-center justify-between cursor-pointer text-left list-none font-serif text-lg sm:text-xl text-[#F4EFE6] font-medium">
+            <span>¿Cómo es la cama Emperor de 2×2 m y el aislamiento acústico?</span>
+            <span class="ml-4 flex-shrink-0 w-6 h-6 rounded-full border border-[rgba(244,239,230,0.2)] flex items-center justify-center text-sm transition-transform duration-300 group-open:rotate-45 group-open:text-[#C87D4B] group-open:border-[#C87D4B]">
+              +
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[rgba(244,239,230,0.08)] text-sm text-[#B8B0A2] font-light leading-relaxed">
+            Cada una de nuestras suites está equipada con una cama Emperor de 200×200 cm fabricada artesanalmente con núcleo de muelles ensacados y topper de látex 100% natural orgánico hipoalergénico. La lencería es de satén de algodón egipcio de 600 hilos y las habitaciones cuentan con doble carpintería aislante de 48 dB para garantizar silencio absoluto.
+          </div>
+        </details>
+
+        <!-- FAQ 5: Política de cancelación flexible 48h -->
+        <details class="group bg-[#1A1814]/70 border border-[rgba(244,239,230,0.10)] rounded-2xl p-5 sm:p-6 transition-all duration-300 [&_summary::-webkit-details-marker]:hidden open:border-[#C87D4B]/40">
+          <summary class="flex items-center justify-between cursor-pointer text-left list-none font-serif text-lg sm:text-xl text-[#F4EFE6] font-medium">
+            <span>¿Cuál es la política de cancelación para reservas directas?</span>
+            <span class="ml-4 flex-shrink-0 w-6 h-6 rounded-full border border-[rgba(244,239,230,0.2)] flex items-center justify-center text-sm transition-transform duration-300 group-open:rotate-45 group-open:text-[#C87D4B] group-open:border-[#C87D4B]">
+              +
+            </span>
+          </summary>
+          <div class="mt-4 pt-4 border-t border-[rgba(244,239,230,0.08)] text-sm text-[#B8B0A2] font-light leading-relaxed">
+            Todas las reservas directas realizadas a través de nuestra web gozan de cancelación 100% gratuita hasta 48 horas antes del día de llegada (15:00 CET). Si tus planes cambian dentro de ese plazo, puedes cancelar o reprogramar las fechas sin penalización alguna.
+          </div>
+        </details>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==============================================
+       4. FOOTER LEGAL & CONTACTO
+       ============================================== -->
+  <footer class="pt-16 pb-12 border-t border-[rgba(244,239,230,0.10)] bg-[#0A0908] text-[#B8B0A2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        
+        <!-- Columna Marca -->
+        <div class="md:col-span-2 space-y-4">
+          <div class="flex items-center gap-2.5 text-[#F4EFE6]">
+            <svg class="w-6 h-7 text-[#C87D4B]" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 27V12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V27" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M7 27V13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13V27" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-opacity="0.6"/>
+              <line x1="1" y1="27" x2="23" y2="27" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span class="font-serif tracking-widest text-lg uppercase text-[#F4EFE6] font-medium">
+              {hotelData.name}
+            </span>
+          </div>
+          <p class="text-xs text-[#B8B0A2] max-w-sm font-light leading-relaxed">
+            {hotelData.tagline}. Un espacio concebido para pausar el tiempo en el corazón de Barcelona.
+          </p>
+          <div class="text-xs text-[#B8B0A2]">
+            <span>Check-in: <strong class="text-[#F4EFE6]">{hotelData.contact.checkInTime}</strong></span> · 
+            <span>Check-out: <strong class="text-[#F4EFE6]">{hotelData.contact.checkOutTime}</strong></span>
+          </div>
+        </div>
+
+        <!-- Columna Contacto -->
+        <div class="space-y-3">
+          <span class="text-xs uppercase tracking-wider text-[#F4EFE6] font-semibold block">Contacto & Ubicación</span>
+          <p class="text-xs font-light leading-relaxed">
+            {hotelData.contact.address}
+          </p>
+          <p class="text-xs font-light">
+            <a href={`tel:${hotelData.contact.phone}`} class="hover:text-[#C87D4B] transition-colors">
+              {hotelData.contact.phone}
+            </a>
+          </p>
+          <p class="text-xs font-light">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-[#C87D4B] transition-colors">
+              {hotelData.contact.instagram}
+            </a>
+          </p>
+        </div>
+
+        <!-- Columna Enlaces Rápidos -->
+        <div class="space-y-3">
+          <span class="text-xs uppercase tracking-wider text-[#F4EFE6] font-semibold block">Recorrido</span>
+          <ul class="text-xs space-y-2 font-light">
+            <li><a href="#recepcion" class="hover:text-[#F4EFE6] transition-colors">01. Recepción</a></li>
+            <li><a href="#comunidad" class="hover:text-[#F4EFE6] transition-colors">02. El Salón (Mural 5×6 m)</a></li>
+            <li><a href="#restaurante" class="hover:text-[#F4EFE6] transition-colors">03. Restaurante Fuego & Origen</a></li>
+            <li><a href="#bar" class="hover:text-[#F4EFE6] transition-colors">04. Coctelería de Autor</a></li>
+            <li><a href="#suites" class="hover:text-[#F4EFE6] transition-colors">05. Suites Cama Emperor 2×2 m</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Barra final de derechos y enlaces legales -->
+      <div class="pt-8 border-t border-[rgba(244,239,230,0.06)] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#B8B0A2]/70 font-light">
+        <p>© {new Date().getFullYear()} NOMAD ARCH S.L. Todos los derechos reservados.</p>
+        <div class="flex items-center gap-6">
+          <a href="/legal" class="hover:text-[#F4EFE6] transition-colors">Aviso Legal</a>
+          <a href="/privacidad" class="hover:text-[#F4EFE6] transition-colors">Privacidad</a>
+          <a href="/cookies" class="hover:text-[#F4EFE6] transition-colors">Política de Cookies</a>
+          <a href="/condiciones-reserva" class="hover:text-[#F4EFE6] transition-colors">Condiciones de Reserva</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+</div>

@@ -1,0 +1,460 @@
+---
+import { hotelData } from "../data/hotel";
+
+interface Props {
+  mode: "hero" | "final";
+}
+
+const { mode } = Astro.props;
+const rooms = hotelData.rooms;
+
+const sumacTypeLabels: Record<string, string> = {
+  simple: "Simple",
+  matrimonial: "Matrimonial",
+  doble: "Doble",
+  triple: "Triple",
+  suite_familiar: "Suite Familiar"
+};
+---
+
+{mode === "hero" ? (
+  <!-- WIDGET MODO HERO (Parada 0 - Recepción, vinculado en vivo con Sumac Gestión) -->
+  <div class="booking-widget-hero w-full backdrop-blur-md bg-[#0F0E0C]/65 border border-[#F4EFE6]/15 rounded-2xl p-4 shadow-2xl text-[#F4EFE6]">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+      <!-- Fecha Llegada -->
+      <div class="flex flex-col gap-1">
+        <label for="hero-checkin" class="text-[10px] uppercase tracking-wider text-[#B8B0A2] font-medium">
+          Llegada
+        </label>
+        <input
+          type="date"
+          id="hero-checkin"
+          name="checkin"
+          class="w-full bg-[#0F0E0C]/75 border border-[#F4EFE6]/15 focus:border-[#C87D4B] focus:ring-1 focus:ring-[#C87D4B] text-[#F4EFE6] px-3 py-2 rounded-xl text-xs sm:text-sm font-sans outline-none transition-all cursor-pointer [color-scheme:dark]"
+          aria-label="Fecha de llegada"
+        />
+      </div>
+
+      <!-- Fecha Salida -->
+      <div class="flex flex-col gap-1">
+        <label for="hero-checkout" class="text-[10px] uppercase tracking-wider text-[#B8B0A2] font-medium">
+          Salida
+        </label>
+        <input
+          type="date"
+          id="hero-checkout"
+          name="checkout"
+          class="w-full bg-[#0F0E0C]/75 border border-[#F4EFE6]/15 focus:border-[#C87D4B] focus:ring-1 focus:ring-[#C87D4B] text-[#F4EFE6] px-3 py-2 rounded-xl text-xs sm:text-sm font-sans outline-none transition-all cursor-pointer [color-scheme:dark]"
+          aria-label="Fecha de salida"
+        />
+      </div>
+
+      <!-- Huéspedes -->
+      <div class="flex flex-col gap-1">
+        <label for="hero-guests" class="text-[10px] uppercase tracking-wider text-[#B8B0A2] font-medium">
+          Huéspedes
+        </label>
+        <div class="relative">
+          <select
+            id="hero-guests"
+            name="guests"
+            class="w-full bg-[#0F0E0C]/75 border border-[#F4EFE6]/15 focus:border-[#C87D4B] focus:ring-1 focus:ring-[#C87D4B] text-[#F4EFE6] px-3 py-2 rounded-xl text-xs sm:text-sm font-sans outline-none transition-all cursor-pointer appearance-none"
+            aria-label="Número de huéspedes"
+          >
+            <option value="1">1 Huésped (Simple / King)</option>
+            <option value="2" selected>2 Huéspedes (Matrimonial / Doble)</option>
+            <option value="3">3 Huéspedes (Triple / Suite)</option>
+            <option value="4">4 Huéspedes (Suite Familiar)</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-[#B8B0A2]">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador en vivo de habitación adecuada en Sumac Gestión -->
+    <div class="flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 mb-3 rounded-xl bg-[#1A1814]/80 border border-[#C87D4B]/25 text-[11px]">
+      <div class="flex items-center gap-2">
+        <span id="hero-sumac-dot" class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="hero-sumac-match" class="text-[#F4EFE6] font-medium">
+          ✓ Hab. 201 (Matrimonial) disponible · Cap. 2 pers.
+        </span>
+      </div>
+      <span id="hero-price-preview" class="text-[#C87D4B] font-semibold tabular-nums">
+        $260 USD/noche · Total $520 USD
+      </span>
+    </div>
+
+    <!-- Barra de acción -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-2.5 border-t border-[#F4EFE6]/10">
+      <div class="text-xs text-[#B8B0A2] flex items-center gap-2">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#C87D4B]"></span>
+        <span>Estancia: <strong id="hero-nights-text" class="text-[#F4EFE6] tabular-nums font-medium">2 noches</strong></span>
+      </div>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button
+          type="button"
+          id="hero-direct-book-btn"
+          class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full border border-[#C87D4B]/50 bg-[#0F0E0C]/80 hover:bg-[#C87D4B]/20 text-[#F4EFE6] font-semibold text-[11px] tracking-wider uppercase transition-all duration-300 cursor-pointer"
+        >
+          <span>Reservar Ya ($ / Crypto)</span>
+        </button>
+        <a
+          id="hero-explore-btn"
+          href="#suites"
+          class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#C87D4B] hover:bg-[#d58b59] text-[#0F0E0C] font-semibold text-[11px] tracking-wider uppercase transition-all duration-300 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <span>Explorar suites</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+) : (
+  <!-- WIDGET MODO FINAL (Parada 4 - Habitación Cama 2x2m, compacto y sincronizado con Sumac) -->
+  <div class="booking-widget-final w-full backdrop-blur-md bg-[#0F0E0C]/65 border border-[#F4EFE6]/15 rounded-2xl p-4 shadow-2xl text-[#F4EFE6]">
+    <!-- Resumen de fechas editable -->
+    <div class="grid grid-cols-3 gap-2.5 p-2.5 rounded-xl bg-[#0F0E0C]/60 border border-[#F4EFE6]/10 mb-2.5">
+      <div>
+        <label for="final-checkin" class="block text-[9px] uppercase tracking-wider text-[#B8B0A2] mb-0.5">Llegada</label>
+        <input
+          type="date"
+          id="final-checkin"
+          class="w-full bg-transparent border-0 text-[#F4EFE6] font-medium text-xs outline-none focus:text-[#C87D4B] cursor-pointer [color-scheme:dark]"
+        />
+      </div>
+      <div>
+        <label for="final-checkout" class="block text-[9px] uppercase tracking-wider text-[#B8B0A2] mb-0.5">Salida</label>
+        <input
+          type="date"
+          id="final-checkout"
+          class="w-full bg-transparent border-0 text-[#F4EFE6] font-medium text-xs outline-none focus:text-[#C87D4B] cursor-pointer [color-scheme:dark]"
+        />
+      </div>
+      <div>
+        <label for="final-guests" class="block text-[9px] uppercase tracking-wider text-[#B8B0A2] mb-0.5">Huéspedes</label>
+        <select
+          id="final-guests"
+          class="w-full bg-transparent border-0 text-[#F4EFE6] font-medium text-xs outline-none focus:text-[#C87D4B] cursor-pointer"
+        >
+          <option value="1" class="bg-[#1A1814] text-[#F4EFE6]">1 Huésped</option>
+          <option value="2" class="bg-[#1A1814] text-[#F4EFE6]">2 Huéspedes</option>
+          <option value="3" class="bg-[#1A1814] text-[#F4EFE6]">3 Huéspedes</option>
+          <option value="4" class="bg-[#1A1814] text-[#F4EFE6]">4 Huéspedes</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Barra de Estado de Sincronización con Sumac Gestión -->
+    <div class="flex items-center justify-between gap-2 px-3 py-1.5 mb-2.5 rounded-xl bg-[#1A1814]/85 border border-[#C87D4B]/25 text-[11px]">
+      <div class="flex items-center gap-2">
+        <span id="final-sumac-dot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+        <span id="final-sumac-status" class="text-[#F4EFE6] font-medium">
+          ✓ Hab. 201 (Matrimonial) asignada en Sumac · Cap. 2 pers.
+        </span>
+      </div>
+      <span class="text-[10px] uppercase tracking-wider text-[#C87D4B] hidden sm:inline">Sumac Live</span>
+    </div>
+
+    <!-- Selector de Suites / Categorías Sumac (Simple, Matrimonial, Doble, Triple, Suite Familiar) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 max-h-[220px] overflow-y-auto pr-1" id="room-cards-container">
+      {rooms.map((room) => (
+        <div
+          data-room-id={room.id}
+          data-sumac-type={room.sumacRoomType}
+          data-capacity={room.capacity}
+          data-price={room.pricePerNight}
+          class="room-card group relative p-2.5 rounded-xl border transition-all duration-300 cursor-pointer bg-[#0F0E0C]/40 hover:bg-[#0F0E0C]/70 border-[rgba(244,239,230,0.12)] hover:border-[#C87D4B]/50"
+        >
+          <div class="flex items-start justify-between gap-1.5 mb-1">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#C87D4B]/20 text-[#C87D4B] font-semibold">
+                  {sumacTypeLabels[room.sumacRoomType] || room.sumacRoomType}
+                </span>
+                <span class="text-[9px] uppercase tracking-wider text-[#B8B0A2]">
+                  Cap. {room.capacity} {room.capacity === 1 ? "pers." : "pers."}
+                </span>
+              </div>
+              <h4 class="font-serif text-sm text-[#F4EFE6] font-medium group-hover:text-[#C87D4B] transition-colors leading-snug mt-0.5">
+                {room.name}
+              </h4>
+            </div>
+            <div class="room-radio-indicator w-4 h-4 rounded-full border border-[rgba(244,239,230,0.3)] flex items-center justify-center transition-all mt-0.5 shrink-0">
+              <span class="w-2 h-2 rounded-full bg-transparent transition-all"></span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-1 mt-1 pt-1.5 border-t border-[rgba(244,239,230,0.08)]">
+            <span class="room-availability-badge text-[10px] text-emerald-400 font-medium truncate">
+              ✓ Disponible en Sumac
+            </span>
+            <div class="text-right shrink-0">
+              <span class="text-xs font-serif text-[#F4EFE6] tabular-nums font-semibold">${room.pricePerNight} USD</span>
+              <span class="text-[9px] text-[#B8B0A2] block tabular-nums room-pen-price">≈ S/ {Math.round(room.pricePerNight * 3.75)}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Barra de Cálculo Total ($ USD + equivalente S/ PEN) y Checkout Directo -->
+    <div class="pt-2.5 border-t border-[#F4EFE6]/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div>
+        <div class="flex items-baseline gap-1.5">
+          <span id="final-calc-summary" class="text-xs text-[#B8B0A2] tabular-nums">$260 USD × 2 noches =</span>
+          <span id="final-total-price" class="text-xl font-serif text-[#F4EFE6] tabular-nums font-semibold">$520 USD</span>
+        </div>
+        <div id="final-pen-equivalent" class="text-[10px] text-[#C87D4B] font-medium tabular-nums">
+          ≈ S/ 1,950 PEN en Sumac Gestión · Pago $ USD o Crypto Multi-Chain
+        </div>
+      </div>
+
+      <button
+        type="button"
+        id="final-checkout-btn"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#C87D4B] hover:bg-[#d58b59] text-[#0F0E0C] font-sans font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-xl hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer"
+      >
+        <span>Confirmar Reserva Directa</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+      </button>
+    </div>
+  </div>
+)}
+
+<script>
+  import {
+    getBookingState,
+    getNightsCount,
+    updateBookingState,
+    startLiveBookingSync
+  } from "../scripts/booking-store";
+  import { hotelData } from "../data/hotel";
+  import { convertUsdToPen } from "../scripts/fx-service";
+
+  const TYPE_LABELS: Record<string, string> = {
+    simple: "Simple",
+    matrimonial: "Matrimonial",
+    doble: "Doble",
+    triple: "Triple",
+    suite_familiar: "Suite Familiar"
+  };
+
+  function initBookingSync() {
+    startLiveBookingSync();
+    const state = getBookingState();
+
+    // 1. Elementos Modo Hero
+    const heroCheckin = document.getElementById("hero-checkin") as HTMLInputElement | null;
+    const heroCheckout = document.getElementById("hero-checkout") as HTMLInputElement | null;
+    const heroGuests = document.getElementById("hero-guests") as HTMLSelectElement | null;
+    const heroNightsText = document.getElementById("hero-nights-text");
+    const heroSumacMatch = document.getElementById("hero-sumac-match");
+    const heroSumacDot = document.getElementById("hero-sumac-dot");
+    const heroPricePreview = document.getElementById("hero-price-preview");
+    const heroExploreBtn = document.getElementById("hero-explore-btn");
+    const heroDirectBookBtn = document.getElementById("hero-direct-book-btn");
+
+    // 2. Elementos Modo Final
+    const finalCheckin = document.getElementById("final-checkin") as HTMLInputElement | null;
+    const finalCheckout = document.getElementById("final-checkout") as HTMLInputElement | null;
+    const finalGuests = document.getElementById("final-guests") as HTMLSelectElement | null;
+    const finalSumacStatus = document.getElementById("final-sumac-status");
+    const finalSumacDot = document.getElementById("final-sumac-dot");
+    const finalCalcSummary = document.getElementById("final-calc-summary");
+    const finalTotalPrice = document.getElementById("final-total-price");
+    const finalPenEquivalent = document.getElementById("final-pen-equivalent");
+    const finalCheckoutBtn = document.getElementById("final-checkout-btn") as HTMLButtonElement | null;
+    const roomCards = document.querySelectorAll(".room-card");
+
+    function render(s: ReturnType<typeof getBookingState>) {
+      const nights = getNightsCount();
+      const nightsLabel = nights === 1 ? "1 noche" : `${nights} noches`;
+
+      // Inputs Hero
+      if (heroCheckin && heroCheckin.value !== s.checkIn) heroCheckin.value = s.checkIn;
+      if (heroCheckout && heroCheckout.value !== s.checkOut) heroCheckout.value = s.checkOut;
+      if (heroGuests && heroGuests.value !== String(s.guests)) heroGuests.value = String(s.guests);
+      if (heroNightsText) heroNightsText.textContent = nightsLabel;
+
+      // Inputs Final
+      if (finalCheckin && finalCheckin.value !== s.checkIn) finalCheckin.value = s.checkIn;
+      if (finalCheckout && finalCheckout.value !== s.checkOut) finalCheckout.value = s.checkOut;
+      if (finalGuests && finalGuests.value !== String(s.guests)) finalGuests.value = String(s.guests);
+
+      // Habitación seleccionada y cálculo en $ USD y S/ PEN
+      const currentRoom = hotelData.rooms.find((r) => r.id === s.selectedRoomId) || hotelData.rooms[0];
+      const totalAmountUsd = currentRoom.pricePerNight * nights;
+      const totalAmountPen = convertUsdToPen(totalAmountUsd, s.usdToPen);
+      const typeLabel = TYPE_LABELS[currentRoom.sumacRoomType] || currentRoom.sumacRoomType;
+
+      const inventoryOk = Boolean(s.inventory?.ok);
+      const roomAvailInfo = s.inventory?.byRoomType?.[currentRoom.sumacRoomType];
+      const assignedNum = s.assignedRoomNumber || roomAvailInfo?.nextRoomNumber;
+      const hasAvailability = inventoryOk && roomAvailInfo ? roomAvailInfo.suitableForGuests : false;
+
+      const matchMessage = !s.inventory
+        ? "⏳ Verificando disponibilidad en vivo con Sumac Gestión..."
+        : !inventoryOk
+          ? "⚠ Inventario Sumac temporalmente no disponible"
+          : hasAvailability
+            ? `✓ Hab. ${assignedNum || "Disponible"} (${typeLabel}) disponible · Cap. ${currentRoom.capacity} pers.`
+            : `⚠ Sin cupo para ${s.guests} huésp. en ${typeLabel} en esas fechas`;
+
+      if (heroSumacMatch) heroSumacMatch.textContent = matchMessage;
+      if (heroSumacDot) {
+        heroSumacDot.className = hasAvailability
+          ? "inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"
+          : "inline-block w-2 h-2 rounded-full bg-amber-400";
+      }
+      if (heroPricePreview) {
+        heroPricePreview.textContent = `$${currentRoom.pricePerNight} USD/noche · Total $${totalAmountUsd} USD`;
+      }
+
+      if (finalSumacStatus) finalSumacStatus.textContent = matchMessage;
+      if (finalSumacDot) {
+        finalSumacDot.className = hasAvailability
+          ? "w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"
+          : "w-2 h-2 rounded-full bg-amber-400 shrink-0";
+      }
+
+      if (finalCalcSummary) {
+        finalCalcSummary.textContent = `$${currentRoom.pricePerNight} USD × ${nightsLabel} =`;
+      }
+      if (finalTotalPrice) {
+        finalTotalPrice.textContent = `$${totalAmountUsd} USD`;
+      }
+      if (finalPenEquivalent) {
+        finalPenEquivalent.textContent = `≈ S/ ${totalAmountPen.toLocaleString("es-PE")} PEN en Sumac Gestión (TC ${s.usdToPen.toFixed(2)}) · Pago $ USD o Crypto`;
+      }
+
+      // Actualizar tarjetas de habitaciones según aforo y disponibilidad real en Sumac Gestión
+      roomCards.forEach((card) => {
+        const roomId = card.getAttribute("data-room-id") || "";
+        const sumacType = card.getAttribute("data-sumac-type") || "";
+        const cap = Number(card.getAttribute("data-capacity") || "2");
+        const priceUsd = Number(card.getAttribute("data-price") || "260");
+        const indicator = card.querySelector(".room-radio-indicator span");
+        const radioCircle = card.querySelector(".room-radio-indicator");
+        const badge = card.querySelector(".room-availability-badge");
+        const penPriceEl = card.querySelector(".room-pen-price");
+
+        if (penPriceEl) {
+          penPriceEl.textContent = `≈ S/ ${convertUsdToPen(priceUsd, s.usdToPen)}`;
+        }
+
+        const typeInfo = s.inventory?.byRoomType?.[sumacType as keyof typeof s.inventory.byRoomType];
+        const capacityOk = cap >= s.guests;
+        const availCount = inventoryOk && typeInfo ? typeInfo.availableCount : 0;
+        const nextNum = inventoryOk && typeInfo ? typeInfo.nextRoomNumber : null;
+        const isSelectable = capacityOk && (!inventoryOk || availCount > 0);
+
+        card.setAttribute("data-selectable", isSelectable ? "true" : "false");
+
+        if (badge) {
+          if (!capacityOk) {
+            badge.textContent = `✕ Aforo máx. ${cap} pers.`;
+            badge.className = "room-availability-badge text-[10px] text-[#B8B0A2]/60 font-medium truncate";
+          } else if (!inventoryOk) {
+            badge.textContent = "⏳ Sujeto a confirmación Sumac";
+            badge.className = "room-availability-badge text-[10px] text-amber-400 font-medium truncate";
+          } else if (availCount === 0) {
+            badge.textContent = "✕ Ocupada en Sumac";
+            badge.className = "room-availability-badge text-[10px] text-rose-400 font-medium truncate";
+          } else {
+            badge.textContent = `✓ Hab. ${nextNum || ""} libre (${availCount} disp.)`;
+            badge.className = "room-availability-badge text-[10px] text-emerald-400 font-medium truncate";
+          }
+        }
+
+        if (!isSelectable) {
+          card.classList.add("opacity-45", "cursor-not-allowed");
+          card.classList.remove("cursor-pointer", "hover:border-[#C87D4B]/50");
+        } else {
+          card.classList.remove("opacity-45", "cursor-not-allowed");
+          card.classList.add("cursor-pointer", "hover:border-[#C87D4B]/50");
+        }
+
+        if (roomId === s.selectedRoomId) {
+          card.classList.add("border-[#C87D4B]", "bg-[#C87D4B]/15", "ring-1", "ring-[#C87D4B]");
+          card.classList.remove("border-[rgba(244,239,230,0.12)]", "bg-[#0F0E0C]/40");
+          if (indicator) indicator.classList.replace("bg-transparent", "bg-[#C87D4B]");
+          if (radioCircle) radioCircle.classList.replace("border-[rgba(244,239,230,0.3)]", "border-[#C87D4B]");
+        } else {
+          card.classList.remove("border-[#C87D4B]", "bg-[#C87D4B]/15", "ring-1", "ring-[#C87D4B]");
+          card.classList.add("border-[rgba(244,239,230,0.12)]", "bg-[#0F0E0C]/40");
+          if (indicator) indicator.classList.replace("bg-[#C87D4B]", "bg-transparent");
+          if (radioCircle) radioCircle.classList.replace("border-[#C87D4B]", "border-[rgba(244,239,230,0.3)]");
+        }
+      });
+    }
+
+    // Listeners Modo Hero
+    heroCheckin?.addEventListener("change", (e) => {
+      updateBookingState({ checkIn: (e.target as HTMLInputElement).value });
+    });
+    heroCheckout?.addEventListener("change", (e) => {
+      updateBookingState({ checkOut: (e.target as HTMLInputElement).value });
+    });
+    heroGuests?.addEventListener("change", (e) => {
+      updateBookingState({ guests: Number((e.target as HTMLSelectElement).value) });
+    });
+
+    // Listeners Modo Final
+    finalCheckin?.addEventListener("change", (e) => {
+      updateBookingState({ checkIn: (e.target as HTMLInputElement).value });
+    });
+    finalCheckout?.addEventListener("change", (e) => {
+      updateBookingState({ checkOut: (e.target as HTMLInputElement).value });
+    });
+    finalGuests?.addEventListener("change", (e) => {
+      updateBookingState({ guests: Number((e.target as HTMLSelectElement).value) });
+    });
+
+    // Selección manual de habitación (solo si cumple aforo y disponibilidad)
+    roomCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const roomId = card.getAttribute("data-room-id");
+        const selectable = card.getAttribute("data-selectable") !== "false";
+        if (roomId && selectable) {
+          const sumacType = card.getAttribute("data-sumac-type") || "";
+          const s = getBookingState();
+          const nextRoomNum =
+            s.inventory?.byRoomType?.[sumacType as keyof typeof s.inventory.byRoomType]?.nextRoomNumber || null;
+          updateBookingState({ selectedRoomId: roomId, assignedRoomNumber: nextRoomNum });
+        }
+      });
+    });
+
+    // Smooth scroll para botón explorar
+    heroExploreBtn?.addEventListener("click", (e) => {
+      const target = document.querySelector("#suites");
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+
+    // Abrir Modal de Checkout Directo ($ USD / Crypto Multi-Chain)
+    const openCheckout = (e: Event) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent("checkout:open"));
+    };
+    heroDirectBookBtn?.addEventListener("click", openCheckout);
+    finalCheckoutBtn?.addEventListener("click", openCheckout);
+
+    window.addEventListener("booking:change", (e: any) => {
+      render(e.detail || getBookingState());
+    });
+
+    render(state);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBookingSync);
+  } else {
+    initBookingSync();
+  }
+  document.addEventListener("astro:page-load", initBookingSync);
+</script>

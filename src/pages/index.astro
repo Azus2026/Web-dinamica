@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import ScrollWorld from "../components/ScrollWorld.astro";
+import HotelDetails from "../components/HotelDetails.astro";
+import CheckoutModal from "../components/CheckoutModal.astro";
+import { hotelData } from "../data/hotel";
+
+const title = `${hotelData.name} — ${hotelData.tagline}`;
+const description = "Refugio arquitectónico y hospitalidad mediterránea contemporánea en Passeig de Gràcia, Barcelona. Descubre nuestras suites con cama Emperor 2×2 m, gran mural de 5×6 m, restaurante de brasa y coctelería de autor.";
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth bg-[#0F0E0C] text-[#F4EFE6]">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="NOMAD ARCH" />
+    <meta name="theme-color" content="#0F0E0C" />
+
+    <!-- Open Graph / Redes Sociales -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/world/stop-0-recepcion.webp" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Favicon SVG en Arco Arquitectónico con currentColor (#C87D4B) -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28' fill='none'%3E%3Cpath d='M3 27V12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V27' stroke='%23C87D4B' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M7 27V13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13V27' stroke='%23C87D4B' stroke-width='1.5' stroke-opacity='0.6' stroke-linecap='round'/%3E%3Cline x1='1' y1='27' x2='23' y2='27' stroke='%23C87D4B' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+
+    <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen bg-[#0F0E0C] text-[#F4EFE6] selection:bg-[#C87D4B] selection:text-[#0F0E0C] antialiased">
+    <!-- Header Flotante Reactivo -->
+    <Header />
+
+    <!-- Recorrido Scroll-World + Ambilight en Arco y Secciones Complementarias -->
+    <main class="relative w-full">
+      <ScrollWorld />
+      <HotelDetails />
+    </main>
+
+    <!-- Modal de Checkout Directo ($ USD / Crypto Multi-Chain -> S/ PEN Sumac Gestión) -->
+    <CheckoutModal />
+  </body>
+</html>

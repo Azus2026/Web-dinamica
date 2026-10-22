@@ -1,0 +1,57 @@
+{
+  "mockedIO": true,
+  "results": [
+    {
+      "name": "Unconfirmed transaction must not be confirmed after timeout",
+      "passed": true,
+      "observed": {
+        "confirmed": false
+      }
+    },
+    {
+      "name": "Reverted transaction is rejected (control)",
+      "passed": true,
+      "observed": {
+        "revertedRejected": true
+      }
+    },
+    {
+      "name": "Unavailable inventory API must not offer confirmed availability",
+      "passed": true,
+      "observed": {
+        "source": "unavailable",
+        "ok": false,
+        "offered": false,
+        "availableRooms": 0
+      }
+    },
+    {
+      "name": "Empty dates must be rejected before producing a quote",
+      "passed": true,
+      "observed": {
+        "checkIn": "2026-10-23",
+        "checkOut": "2026-10-25",
+        "quotedNights": 2
+      }
+    },
+    {
+      "name": "Simulation explicitly flags that it is not a real wallet transaction (control)",
+      "passed": true,
+      "observed": {
+        "reservationUsd": 520,
+        "chargedUsd": 0.02,
+        "isRealWalletTx": false
+      }
+    },
+    {
+      "name": "Selecting Solana must not send an EVM payment on Arbitrum",
+      "passed": true,
+      "observed": {
+        "evmTransfers": 0,
+        "rejected": "Red no soportada (solana). Los pagos están habilitados exclusivamente en Arbitrum One."
+      }
+    }
+  ],
+  "passed": 6,
+  "failed": 0
+}
